@@ -6,11 +6,11 @@ export TARGET_DIR="../../../system_disk/bin"
 mkdir -pv build_procps
 cp patch-procps-config-sub patch-procps-configure build_procps
 cd build_procps
-wget -c "https://fossies.org/linux/misc/procps-ng-3.3.15.tar.xz"
-tar -xf 'procps-ng-3.3.15.tar.xz'
+wget -c "https://fossies.org/linux/misc/procps-ng-3.3.16.tar.xz"
+tar -xf 'procps-ng-3.3.16.tar.xz'
 patch -p0 < patch-procps-configure
 patch -p0 < patch-procps-config-sub
-cd procps-ng-3.3.15
+cd procps-ng-3.3.16
 rm -rf build
 mkdir -pv build
 cd build

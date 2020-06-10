@@ -1,6 +1,6 @@
-diff -ruN procps-origin/config.sub procps-ng-3.3.15/config.sub
+diff -ruN procps-origin/config.sub procps-ng-3.3.16/config.sub
 --- procps-origin/config.sub	2018-02-24 17:00:57.000000000 +0100
-+++ procps-ng-3.3.15/config.sub	2019-09-23 22:38:39.366942757 +0200
++++ procps-ng-3.3.16/config.sub	2019-09-23 22:38:39.366942757 +0200
 @@ -2,7 +2,7 @@
  # Configuration validation subroutine script.
  #   Copyright 1992-2018 Free Software Foundation, Inc.

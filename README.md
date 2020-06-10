@@ -34,6 +34,9 @@ Or an archlinux system
 ### the *grub* program should be installed in order to create a disk image with kernel
 `sudo apt-get install grub`
 
+### install rsync for os disk creation
+`sudo apt-get install rsync`
+
 ### You need also *losetup* to create a disk image  
 `sudo apt-get install mount`
 
@@ -79,8 +82,12 @@ Install the default host target to *i686-unknown-linux-gnu*
 Then, to recompile *libcore*, you need rust sources   
 `rustup component add rust-src`
 
-## Build the entire OS  
+## Now, install the entire turbofish toolchain  
+Sorry, buy you have to give root rights, because it will create a turbofish toolchain directory in your system root  
+First, ensure you got automake version 1.15. On Debian 10, you could simply write `sudo apt-get install automake-1.15`  
+`./install_toolchain_turbofish.sh`
 
+## Build the entire OS  
 `make && make unix`
 
 ## Now, it is the time to launch the OS on your computer

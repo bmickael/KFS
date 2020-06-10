@@ -1,4 +1,5 @@
 #!/bin/bash
+
 export TARGET="i686-turbofish"
 export ROOT_TOOLCHAIN="/toolchain_turbofish"
 export TOOLCHAIN_SYSROOT="$ROOT_TOOLCHAIN/sysroot"
@@ -25,6 +26,10 @@ cd 'binutils-2.32'
 # In LD subdirectory (Maybe install automake 1.15.1)
 cd ld
 automake-1.15
+if [ $? -ne 0 ]; then
+  echo "automake-1.15 command failure. Please fix this problem"
+  exit 1
+fi
 cd -
 # Create a build directory in binutils
 mkdir -p build
