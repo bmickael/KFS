@@ -4,6 +4,7 @@ use alloc::vec;
 use alloc::vec::Vec;
 use ansi_escape_code::{AnsiColor, CursorMove, CSI};
 use arrayvec::ArrayString;
+use core::convert::TryInto;
 use core::fmt::Write;
 use libc_binding::local_buffer;
 use screen::{AdvancedGraphic, Drawer};
@@ -510,7 +511,11 @@ impl BufferedTty {
         if let Ok((height, width, bpp)) = screen_monad.query_graphic_infos() {
             let len = height * width * bpp / 8;
             let buf = alloc_user_mem(len)?;
-            Ok(local_buffer { buf, len, bpp })
+            Ok(local_buffer {
+                buf,
+                len: len.try_into().unwrap(),
+                bpp: bpp.try_into().unwrap(),
+            })
         } else {
             Err(())
         }
