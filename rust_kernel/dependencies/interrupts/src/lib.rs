@@ -1,6 +1,7 @@
 //! This crate provide a small brief about IRQ
 #![cfg_attr(not(test), no_std)]
 #![feature(asm)]
+#![feature(llvm_asm)]
 #![feature(slice_index_methods)]
 
 #[macro_use]
@@ -14,13 +15,13 @@ pub use self::idt::{GateType, IdtGateEntry, Idtr, InterruptTable};
 /// Enables interrupts system-wide
 #[inline(always)]
 pub unsafe fn enable() {
-    asm!("sti" :::: "volatile");
+    llvm_asm!("sti" :::: "volatile");
 }
 
 /// Disable interrupts system-wide
 #[inline(always)]
 pub unsafe fn disable() {
-    asm!("cli" :::: "volatile");
+    llvm_asm!("cli" :::: "volatile");
 }
 
 /// Get the current interrupts state

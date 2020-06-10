@@ -217,7 +217,7 @@ impl Idtr {
             idt_addr: 1 as *mut _,
         };
 
-        asm!("sidt $0" : "=*m"(&mut idtr as *mut _) :: "memory" : "volatile");
+        llvm_asm!("sidt $0" : "=*m"(&mut idtr as *mut _) :: "memory" : "volatile");
         idtr
     }
 
@@ -225,7 +225,7 @@ impl Idtr {
     #[no_mangle]
     #[inline(never)]
     unsafe extern "C" fn load_idtr(&self) {
-        asm!("lidt ($0)" :: "r" (self as *const _) : "memory" : "volatile");
+        llvm_asm!("lidt ($0)" :: "r" (self as *const _) : "memory" : "volatile");
     }
 
     /// Loads the Idtr structure in the actual register IDTR.
