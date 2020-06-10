@@ -55,7 +55,7 @@ pub extern "C" fn kmain(
     let _r = exit_qemu(0);
     loop {
         unsafe {
-            asm!("hlt");
+            llvm_asm!("hlt");
         }
     }
 }

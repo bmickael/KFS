@@ -59,7 +59,7 @@ impl RawSmartMutex {
         let mut current_ebp: u32;
 
         unsafe {
-            asm!("mov %ebp, %eax" : "={eax}"(current_ebp):);
+            llvm_asm!("mov %ebp, %eax" : "={eax}"(current_ebp):);
             // Get the ancestor EBP value
             // NOTE: In case of inlined code. this raw deferencing may causes a page fault
             current_ebp = *(current_ebp as *const u32) as _;

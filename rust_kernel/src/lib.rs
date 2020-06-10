@@ -3,6 +3,7 @@
 #![feature(const_raw_ptr_to_usize_cast)] // rust is being annoying on the types of ffi functions
 #![feature(core_intrinsics)] // for function! macro
 #![feature(asm)] // for inline asm
+#![feature(llvm_asm)]
 #![feature(stdsimd)] // for has_cpuid, dafuq rust.
 #![feature(slice_index_methods)]
 #![cfg_attr(test, feature(allocator_api))]

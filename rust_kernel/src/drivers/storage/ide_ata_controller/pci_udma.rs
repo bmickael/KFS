@@ -137,7 +137,7 @@ impl Drive {
 
         loop {
             unsafe {
-                asm!("hlt");
+                llvm_asm!("hlt");
             }
 
             if TRIGGER.compare_and_swap(true, false, Ordering::Relaxed) == true {

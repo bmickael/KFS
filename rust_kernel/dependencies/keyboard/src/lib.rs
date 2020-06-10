@@ -1,7 +1,7 @@
 //! See [PS/2 Keyboard](https://wiki.osdev.org/Keyboard)
 #![cfg_attr(not(test), no_std)]
 #![deny(missing_docs)]
-#![feature(asm)]
+#![feature(llvm_asm)]
 
 use io::{Io, Pio};
 
@@ -66,7 +66,7 @@ impl Ps2Controler {
         }
         self.command.write(0xfe);
         unsafe {
-            asm!("hlt");
+            llvm_asm!("hlt");
         }
     }
 }

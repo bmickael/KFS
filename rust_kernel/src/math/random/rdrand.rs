@@ -5,7 +5,7 @@ pub fn rdrand() -> u32 {
     let result: u32;
 
     unsafe {
-        asm!("
+        llvm_asm!("
             1:
             rdrand %eax
             jnc 1b" : "={eax}"(result) :::);
