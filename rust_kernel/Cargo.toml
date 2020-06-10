@@ -22,7 +22,6 @@ bitflags = "1.0.4"
 log = "0.4.6"
 lock_api = "0.1.5"
 derive_is_enum_variant = "0.1.1"
-fallible_collections = "0.1.2"
 io = { path = "dependencies/io" }
 mbr = { path = "dependencies/mbr" }
 raw_data = { path = "dependencies/raw_data" }
@@ -42,6 +41,10 @@ time = { path = "dependencies/time" }
 ansi_escape_code = { path = "dependencies/ansi_escape_code" }
 rtc_toolkit = { path = "dependencies/rtc_toolkit" }
 screen = { path = "dependencies/screen" }
+
+[dependencies.fallible_collections]
+version = "0.1.2"
+features = ["unstable"]
 
 [dependencies.itertools]
 version = "0.8.0"
