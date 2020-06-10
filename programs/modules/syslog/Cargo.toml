@@ -16,6 +16,8 @@ interrupts = { path = "../dependencies/interrupts" }
 libc_binding = { path = "../dependencies/libc_binding" }
 ansi_escape_code = { path = "../dependencies/ansi_escape_code" }
 
+
 [dependencies.fallible_collections]
-version = "0.1.2"
+#version = "0.1.2"
 features = ["unstable"]
+git = "https://github.com/sclolus/fallible_collections"
