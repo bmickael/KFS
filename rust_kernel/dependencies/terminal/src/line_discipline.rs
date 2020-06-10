@@ -106,7 +106,7 @@ impl LineDiscipline {
                         self.tty.write_char(' ').unwrap();
                         self.tty.as_mut().move_cursor(CursorMove::Backward(1));
                     }
-                    return Ok(());;
+                    return Ok(());
                 }
                 // dbg!(key);
                 // handle kill key
@@ -130,16 +130,16 @@ impl LineDiscipline {
                         .as_mut()
                         .move_cursor(CursorMove::HorizontalAbsolute(0));
 
-                    return Ok(());;
+                    return Ok(());
                 }
                 if key as u32 == self.termios.c_cc[VEOF as usize] {
                     self.end_of_file_set = true;
                     unsafe {
                         messaging::send_message(MessageTo::Reader {
                             uid_file_op: self.tty.uid_file_op.expect("no FileOperation registered"),
-                        });;
+                        });
                     }
-                    return Ok(());;
+                    return Ok(());
                 }
             }
             if self.termios.c_lflag & ISIG != 0 {
@@ -151,7 +151,7 @@ impl LineDiscipline {
                             content: ProcessGroupMessage::Signal(Signum::SIGINT),
                         });
                     }
-                    return Ok(());;
+                    return Ok(());
                 }
                 if key as u32 == self.termios.c_cc[VSUSP as usize] {
                     unsafe {
@@ -160,7 +160,7 @@ impl LineDiscipline {
                             content: ProcessGroupMessage::Signal(Signum::SIGTSTP),
                         });
                     }
-                    return Ok(());;
+                    return Ok(());
                 }
                 if key as u32 == self.termios.c_cc[VQUIT as usize] {
                     unsafe {
@@ -169,7 +169,7 @@ impl LineDiscipline {
                             content: ProcessGroupMessage::Signal(Signum::SIGQUIT),
                         });
                     }
-                    return Ok(());;
+                    return Ok(());
                 }
             }
             /* PUSH THE KEY */
@@ -187,7 +187,7 @@ impl LineDiscipline {
                 unsafe {
                     messaging::send_message(MessageTo::Reader {
                         uid_file_op: self.tty.uid_file_op.expect("no FileOperation registered"),
-                    });;
+                    });
                 }
             }
             if self.termios.c_lflag & ECHO != 0 {

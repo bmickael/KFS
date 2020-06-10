@@ -5,8 +5,8 @@ use kernel_modules::{
     SymbolList,
 };
 
-use keyboard::{KeySymb, KeyCode, ScanCode};
 use keyboard::{CallbackKeyboard, KeyboardDriver, Ps2Controler};
+use keyboard::{KeyCode, KeySymb, ScanCode};
 
 use kernel_modules::{Irq, MessageTo};
 
@@ -134,7 +134,13 @@ pub fn handle_key_press(scancode: u32, keycode: Option<KeyCode>, keysymb: Option
     // in the keyboard interrupt handler, after reading the keysymb,
     // we send a message to the tty which will be handled in the next
     // schedule
-    unsafe { (CTX.as_ref().unwrap().send_fn)(MessageTo::Tty { scancode, keycode, keysymb}) }
+    unsafe {
+        (CTX.as_ref().unwrap().send_fn)(MessageTo::Tty {
+            scancode,
+            keycode,
+            keysymb,
+        })
+    }
 }
 
 #[cfg(test)]

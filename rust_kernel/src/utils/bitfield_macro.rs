@@ -28,7 +28,7 @@ macro_rules! gen_builder_pattern_bitfields_methods {
 macro_rules! gen_builder_pattern_bitfields_range_methods {
     ($field: ident, $setter_name: ident, $bits: expr, $member: ident, $type: ty) => {
         #[allow(dead_code)]
-        pub fn $setter_name(&mut self, value: $type ) -> &mut Self {
+        pub fn $setter_name(&mut self, value: $type) -> &mut Self {
             use bit_field::BitField;
 
             self.$member.set_bits($bits, value.into());
@@ -41,7 +41,7 @@ macro_rules! gen_builder_pattern_bitfields_range_methods {
 
             self.$member.get_bits($bits)
         }
-    }
+    };
 }
 
 #[cfg(test)]

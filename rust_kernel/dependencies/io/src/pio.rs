@@ -9,7 +9,7 @@ use core::marker::PhantomData;
 #[inline(always)]
 pub extern "C" fn io_wait() {
     unsafe {
-        asm!("out %al, %dx" :: "{al}"(0x42), "{dx}"(0x80));
+        llvm_asm!("out %al, %dx" :: "{al}"(0x42), "{dx}"(0x80));
     }
 }
 
@@ -37,14 +37,14 @@ impl Io for Pio<u8> {
     fn read(&self) -> Self::Value {
         let result: Self::Value;
         unsafe {
-            asm!("in %dx, %al" : "={al}"(result) : "{dx}"(self.port));
+            llvm_asm!("in %dx, %al" : "={al}"(result) : "{dx}"(self.port));
         }
         result
     }
 
     fn write(&mut self, value: Self::Value) {
         unsafe {
-            asm!("out %al, %dx" :: "{al}"(value), "{dx}"(self.port));
+            llvm_asm!("out %al, %dx" :: "{al}"(value), "{dx}"(self.port));
         }
     }
 }
@@ -55,14 +55,14 @@ impl Io for Pio<u16> {
     fn read(&self) -> Self::Value {
         let result: Self::Value;
         unsafe {
-            asm!("in %dx, %ax" : "={ax}"(result) : "{dx}"(self.port));
+            llvm_asm!("in %dx, %ax" : "={ax}"(result) : "{dx}"(self.port));
         }
         result
     }
 
     fn write(&mut self, value: Self::Value) {
         unsafe {
-            asm!("out %ax, %dx" :: "{ax}"(value), "{dx}"(self.port));
+            llvm_asm!("out %ax, %dx" :: "{ax}"(value), "{dx}"(self.port));
         }
     }
 }
@@ -73,14 +73,14 @@ impl Io for Pio<u32> {
     fn read(&self) -> Self::Value {
         let result: Self::Value;
         unsafe {
-            asm!("in %dx, %eax" : "={eax}"(result) : "{dx}"(self.port));
+            llvm_asm!("in %dx, %eax" : "={eax}"(result) : "{dx}"(self.port));
         }
         result
     }
 
     fn write(&mut self, value: Self::Value) {
         unsafe {
-            asm!("out %eax, %dx" :: "{eax}"(value), "{dx}"(self.port));
+            llvm_asm!("out %eax, %dx" :: "{eax}"(value), "{dx}"(self.port));
         }
     }
 }

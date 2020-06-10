@@ -845,7 +845,6 @@ mod amode_should {
     amode_from_openflags! {
         Amode::WRITE, OpenFlags::O_TRUNC, be_write_on_o_trunc
     }
-
 }
 
 #[repr(u32)]

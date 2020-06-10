@@ -87,6 +87,9 @@ Sorry, buy you have to give root rights, because it will create a turbofish tool
 First, ensure you got automake version 1.15. On Debian 10, you could simply write `sudo apt-get install automake-1.15`  
 `./install_toolchain_turbofish.sh`
 
+## Install tool to bind the C libc on Rust
+`cargo install bindgen`
+
 ## Build the entire OS  
 `make && make unix`
 

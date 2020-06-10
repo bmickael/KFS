@@ -1,5 +1,4 @@
 #![cfg_attr(not(test), no_std)]
-#![feature(underscore_const_names)]
 /// This file contains the macros for making constant assertions that fails at compile time.
 
 /// This macro enable us to make assertions that are evaluated at compile time, if a constant assertion is false, then the compilation fails.

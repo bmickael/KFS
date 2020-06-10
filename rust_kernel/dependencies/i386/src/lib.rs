@@ -1,6 +1,7 @@
 #![cfg_attr(not(test), no_std)]
 #![feature(stdsimd)]
 #![feature(asm)]
+#![feature(llvm_asm)]
 
 use bit_field::BitField;
 
@@ -100,7 +101,7 @@ impl Eflags {
         let inner: u32;
 
         unsafe {
-            asm!("pushfd
+            llvm_asm!("pushfd
                        pop eax"
                       : "={eax}" (inner) : : : "intel", "volatile")
         };
