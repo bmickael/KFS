@@ -44,6 +44,15 @@ impl From<TryReserveError> for Errno {
     }
 }
 
+extern crate hashbrown;
+use hashbrown::CollectionAllocErr;
+
+impl From<CollectionAllocErr> for Errno {
+    fn from(_e: CollectionAllocErr) -> Self {
+        Errno::ENOMEM
+    }
+}
+
 #[repr(u32)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum Errno {
