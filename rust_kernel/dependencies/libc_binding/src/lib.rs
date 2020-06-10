@@ -38,9 +38,9 @@ impl TryFrom<u32> for Signum {
 #[macro_use]
 extern crate const_assert;
 extern crate alloc;
-use alloc::CollectionAllocErr;
-impl From<CollectionAllocErr> for Errno {
-    fn from(_e: CollectionAllocErr) -> Self {
+use alloc::collections::TryReserveError;
+impl From<TryReserveError> for Errno {
+    fn from(_e: TryReserveError) -> Self {
         Errno::ENOMEM
     }
 }
