@@ -1,7 +1,7 @@
 //! This file contains the main function of the module
 
 use kernel_modules::{
-    ConfigurableCallback, KernelSymbolList, ModConfig, ModError, ModResult, ModReturn,
+    ConfigurableCallback, KernelEvent, KernelSymbolList, ModConfig, ModError, ModResult, ModReturn,
     ModSpecificReturn, SymbolList,
 };
 

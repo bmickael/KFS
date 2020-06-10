@@ -55,8 +55,7 @@ dependencies = [
 [[package]]
 name = "fallible_collections"
 version = "0.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d4ab02c15f833c35f98e54940359ab4e3b82879ee69d46b50674b908ba030306"
+source = "git+https://github.com/sclolus/fallible_collections#b331f38f31f5a5eabb2d94462a0fd784df3baea1"
 dependencies = [
  "hashbrown",
 ]
