@@ -264,7 +264,7 @@ impl KeyboardDriver {
                 }
                 RequestKeySymb(u) => {
                     KeyCode::from_scancode(scancode)
-                        .map(|s| self.keycode_to_keysymb(s).map(|s| u(s)));
+                        .map(|symbole| self.keycode_to_keysymb(symbole).map(|symbole| u(symbole)));
                 }
                 RequestAll(u) => {
                     let mut keycode: Option<KeyCode> = None;
