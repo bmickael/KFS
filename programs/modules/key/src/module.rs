@@ -6,7 +6,7 @@ use kernel_modules::{
 };
 
 use keyboard::{CallbackKeyboard, KeyboardDriver, Ps2Controler};
-use keyboard::{KeyCode, KeySymb, ScanCode};
+use keyboard::{KeyCode, KeySymb};
 
 use kernel_modules::{Irq, MessageTo};
 

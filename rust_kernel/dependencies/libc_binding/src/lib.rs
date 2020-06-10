@@ -1,7 +1,6 @@
 #![allow(non_camel_case_types)]
 #![allow(non_upper_case_globals)]
 #![feature(try_reserve)]
-#![feature(underscore_const_names)] // has been stabilized in last rust stable.
 #![cfg_attr(not(test), no_std)]
 pub mod libc;
 pub use libc::*;
