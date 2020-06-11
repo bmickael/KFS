@@ -4,6 +4,7 @@ use super::scheduler::SCHEDULER;
 use super::vfs::{Path, VFS};
 
 use core::convert::TryFrom;
+use core::convert::TryInto;
 use libc_binding::c_char;
 use libc_binding::{dirent, DIR};
 
@@ -48,7 +49,7 @@ pub fn sys_opendir(filename: *const c_char, dir: *mut DIR) -> SysResult<u32> {
             core::ptr::copy(dirent_vector.as_ptr(), user_mem, dirent_vector.len());
         }
         safe_dir.current_offset = 0;
-        safe_dir.length = dirent_vector.len();
+        safe_dir.length = dirent_vector.len().try_into().unwrap();
         safe_dir.array = user_mem;
         Ok(0)
     })

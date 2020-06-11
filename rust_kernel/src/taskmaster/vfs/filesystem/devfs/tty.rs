@@ -171,7 +171,7 @@ impl FileOperation for TtyFileOperation {
                         .current_thread()
                         .unwrap_process()
                         .get_virtual_allocator();
-                    v.make_checked_slice::<u8>(local_buffer.buf, local_buffer.len)
+                    v.make_checked_slice::<u8>(local_buffer.buf, local_buffer.len as usize)
                 }?;
                 terminal
                     .get_tty(self.controlling_terminal)
