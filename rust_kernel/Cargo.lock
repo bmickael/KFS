@@ -108,7 +108,7 @@ dependencies = [
 [[package]]
 name = "fallible_collections"
 version = "0.1.2"
-source = "git+https://github.com/sclolus/fallible_collections#b331f38f31f5a5eabb2d94462a0fd784df3baea1"
+source = "git+https://github.com/sclolus/fallible_collections#a0ffcb0bbb6c1a0d05ba4ba6c628637d62d5566a"
 dependencies = [
  "hashbrown",
 ]

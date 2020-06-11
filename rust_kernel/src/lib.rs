@@ -13,7 +13,6 @@
 #![feature(try_reserve)]
 #![feature(vec_remove_item)]
 #![feature(type_alias_enum_variants)]
-#![feature(const_vec_new)]
 #![feature(try_trait)]
 #![feature(result_map_or_else)]
 #![feature(const_fn)]

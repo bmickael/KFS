@@ -1,4 +1,7 @@
+//! this module provides a TryClone derive.
+
 extern crate proc_macro;
+
 use syn::spanned::Spanned;
 use syn::Data::{Enum, Struct};
 use syn::GenericParam;
