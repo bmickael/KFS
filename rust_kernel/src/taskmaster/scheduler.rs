@@ -17,7 +17,7 @@ mod second_callback;
 use second_callback::{second_callback_handler, SECOND_CALLBACK_TRIGGER};
 
 use alloc::boxed::Box;
-use alloc::collections::CollectionAllocErr;
+use alloc::collections::TryReserveError;
 use alloc::vec::Vec;
 use ansi_escape_code::Colored;
 use core::ffi::c_void;
@@ -239,7 +239,7 @@ impl Scheduler {
         &mut self,
         father_pid: Pid,
         process: Box<UserProcess>,
-    ) -> Result<Pid, CollectionAllocErr> {
+    ) -> Result<Pid, TryReserveError> {
         let pid = self.get_available_pid();
         self.running_process.try_reserve(1)?;
         self.all_process.try_insert(

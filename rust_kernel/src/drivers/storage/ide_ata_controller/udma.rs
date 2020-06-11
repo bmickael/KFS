@@ -11,7 +11,7 @@ use crate::memory::tools::*;
 use alloc::boxed::Box;
 use alloc::vec::Vec;
 
-use alloc::collections::CollectionAllocErr;
+use alloc::collections::TryReserveError;
 use fallible_collections::{try_vec, FallibleBox};
 
 /// Global UDMA structure
@@ -112,7 +112,7 @@ impl Udma {
     pub fn init(
         mut bus_mastered_register: u16,
         channel: Channel,
-    ) -> core::result::Result<Self, CollectionAllocErr> {
+    ) -> core::result::Result<Self, TryReserveError> {
         // The data buffers cannot cross a 64K boundary
         let mut memory = try_vec![try_vec![0; Self::PRD_SIZE]?; Self::NBR_DMA_ENTRIES]?;
         let mut prdt = Box::try_new(Prdt::new())?;

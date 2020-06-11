@@ -12,7 +12,7 @@ use core::ffi::c_void;
 use fallible_collections::FallibleBox;
 
 use alloc::boxed::Box;
-use alloc::collections::CollectionAllocErr;
+use alloc::collections::TryReserveError;
 
 use core::mem;
 
@@ -43,7 +43,7 @@ pub struct Thread {
 }
 
 impl Thread {
-    pub fn new(process_state: ProcessState) -> Result<Self, CollectionAllocErr> {
+    pub fn new(process_state: ProcessState) -> Result<Self, TryReserveError> {
         Ok(Self {
             process_state,
             signal: SignalInterface::new(),

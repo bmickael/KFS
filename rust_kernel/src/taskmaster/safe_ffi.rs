@@ -2,7 +2,7 @@
 
 use libc_binding::c_char;
 
-use alloc::collections::CollectionAllocErr;
+use alloc::collections::TryReserveError;
 use alloc::vec::Vec;
 
 use core::convert;
@@ -64,7 +64,7 @@ impl CString {
 
 /// Create a CString from a RUST str slice
 impl convert::TryFrom<&str> for CString {
-    type Error = CollectionAllocErr;
+    type Error = TryReserveError;
     fn try_from(rust_str: &str) -> Result<Self, Self::Error> {
         let v: Vec<c_char> = try_vec![0; rust_str.len() + 1]?;
         unsafe {
@@ -177,7 +177,7 @@ impl CStringArray {
 }
 
 impl TryClone for CString {
-    fn try_clone(&self) -> Result<Self, CollectionAllocErr> {
+    fn try_clone(&self) -> Result<Self, TryReserveError> {
         let inner = self.0.try_clone()?;
 
         Ok(Self(inner))
@@ -185,7 +185,7 @@ impl TryClone for CString {
 }
 
 impl TryClone for CStringArray {
-    fn try_clone(&self) -> Result<Self, CollectionAllocErr> {
+    fn try_clone(&self) -> Result<Self, TryReserveError> {
         let mut owned_content = Vec::try_with_capacity(self.len())?;
         let mut c_pointer = Vec::try_with_capacity(self.len() + 1)?;
 
@@ -205,7 +205,7 @@ impl TryClone for CStringArray {
 
 /// Create a CStringArray from a RUST str slice array
 impl convert::TryFrom<&[&str]> for CStringArray {
-    type Error = CollectionAllocErr;
+    type Error = TryReserveError;
     fn try_from(rust_str_array: &[&str]) -> Result<Self, Self::Error> {
         let mut c_pointer: Vec<*const c_char> = Vec::new();
         let mut owned_content: Vec<CString> = Vec::new();

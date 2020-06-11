@@ -251,11 +251,11 @@ pub struct FileDescriptor {
     path: Path,
 }
 
-use alloc::collections::CollectionAllocErr;
+use alloc::collections::TryReserveError;
 
 /// TryClone Boilerplate. The ref counter of the FileOperation must be incremented when Cloning
 impl TryClone for FileDescriptor {
-    fn try_clone(&self) -> Result<Self, CollectionAllocErr> {
+    fn try_clone(&self) -> Result<Self, TryReserveError> {
         self.file_operation.lock().register(self.flags);
         Ok(Self {
             flags: self.flags.clone(),

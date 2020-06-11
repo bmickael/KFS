@@ -10,7 +10,7 @@ use super::vfs::Path;
 
 use super::safe_ffi::CStringArray;
 
-use alloc::collections::CollectionAllocErr;
+use alloc::collections::TryReserveError;
 use alloc::vec::Vec;
 use core::ffi::c_void;
 use fallible_collections::{btree::BTreeMap, TryClone};
@@ -212,7 +212,7 @@ impl Credentials {
 }
 
 impl ThreadGroup {
-    pub fn try_new(father_pid: Pid, thread: Thread, pgid: Pid) -> Result<Self, CollectionAllocErr> {
+    pub fn try_new(father_pid: Pid, thread: Thread, pgid: Pid) -> Result<Self, TryReserveError> {
         let mut all_thread = BTreeMap::new();
         all_thread.try_insert(0, thread)?;
         Ok(ThreadGroup {

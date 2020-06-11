@@ -5,7 +5,7 @@ use super::{
 };
 use super::{Filename, Inode as VfsInode, InodeData as VfsInodeData, InodeId, Path};
 use crate::taskmaster::kmodules::CURRENT_UNIX_TIME;
-use alloc::collections::CollectionAllocErr;
+use alloc::collections::TryReserveError;
 use core::sync::atomic::Ordering;
 
 use crate::taskmaster::SCHEDULER;
@@ -131,7 +131,7 @@ impl KeyGenerator<DirectoryEntryId> for ProcFs {
 // #[derive(Debug)]
 struct Inode(
     VfsInode,
-    Box<dyn FnMut(InodeId) -> Result<Box<dyn Driver>, CollectionAllocErr>>,
+    Box<dyn FnMut(InodeId) -> Result<Box<dyn Driver>, TryReserveError>>,
 );
 
 impl core::fmt::Debug for Inode {
@@ -170,7 +170,7 @@ impl ProcFs {
         &mut self,
         parent: DirectoryEntryId,
         name: Filename,
-        gen_driver: Box<dyn FnMut(InodeId) -> Result<Box<dyn Driver>, CollectionAllocErr>>,
+        gen_driver: Box<dyn FnMut(InodeId) -> Result<Box<dyn Driver>, TryReserveError>>,
         (owner, group): (uid_t, gid_t),
     ) -> SysResult<DirectoryEntryId> {
         let driver = Box::try_new(DefaultDriver)?;
@@ -229,7 +229,7 @@ impl ProcFs {
         self.register_file(
             root_dir_id,
             filesystems_filename,
-            Box::try_new(|inode_id| -> Result<Box<dyn Driver>, CollectionAllocErr> {
+            Box::try_new(|inode_id| -> Result<Box<dyn Driver>, TryReserveError> {
                 Ok(Box::try_new(filesystems::FilesystemsDriver::new(inode_id))? as Box<dyn Driver>)
             })?,
             owning,
@@ -237,7 +237,7 @@ impl ProcFs {
         self.register_file(
             root_dir_id,
             version_filename,
-            Box::try_new(|inode_id| -> Result<Box<dyn Driver>, CollectionAllocErr> {
+            Box::try_new(|inode_id| -> Result<Box<dyn Driver>, TryReserveError> {
                 Ok(Box::try_new(version::VersionDriver::new(inode_id))? as Box<dyn Driver>)
             })?,
             owning,
@@ -246,7 +246,7 @@ impl ProcFs {
         self.register_file(
             root_dir_id,
             proc_stat_filename,
-            Box::try_new(|inode_id| -> Result<Box<dyn Driver>, CollectionAllocErr> {
+            Box::try_new(|inode_id| -> Result<Box<dyn Driver>, TryReserveError> {
                 Ok(Box::try_new(proc_stat::ProcStatDriver::new(inode_id))? as Box<dyn Driver>)
             })?,
             owning,
@@ -255,7 +255,7 @@ impl ProcFs {
         self.register_file(
             root_dir_id,
             uptime_filename,
-            Box::try_new(|inode_id| -> Result<Box<dyn Driver>, CollectionAllocErr> {
+            Box::try_new(|inode_id| -> Result<Box<dyn Driver>, TryReserveError> {
                 Ok(Box::try_new(uptime::UptimeDriver::new(inode_id))? as Box<dyn Driver>)
             })?,
             owning,
@@ -264,7 +264,7 @@ impl ProcFs {
         self.register_file(
             root_dir_id,
             loadavg_filename,
-            Box::try_new(|inode_id| -> Result<Box<dyn Driver>, CollectionAllocErr> {
+            Box::try_new(|inode_id| -> Result<Box<dyn Driver>, TryReserveError> {
                 Ok(Box::try_new(loadavg::LoadavgDriver::new(inode_id))? as Box<dyn Driver>)
             })?,
             owning,
@@ -273,7 +273,7 @@ impl ProcFs {
         self.register_file(
             root_dir_id,
             meminfo_filename,
-            Box::try_new(|inode_id| -> Result<Box<dyn Driver>, CollectionAllocErr> {
+            Box::try_new(|inode_id| -> Result<Box<dyn Driver>, TryReserveError> {
                 Ok(Box::try_new(meminfo::MeminfoDriver::new(inode_id))? as Box<dyn Driver>)
             })?,
             owning,
@@ -282,7 +282,7 @@ impl ProcFs {
         self.register_file(
             root_dir_id,
             vmstat_filename,
-            Box::try_new(|inode_id| -> Result<Box<dyn Driver>, CollectionAllocErr> {
+            Box::try_new(|inode_id| -> Result<Box<dyn Driver>, TryReserveError> {
                 Ok(Box::try_new(vmstat::VmstatDriver::new(inode_id))? as Box<dyn Driver>)
             })?,
             owning,
@@ -291,7 +291,7 @@ impl ProcFs {
         self.register_file(
             root_dir_id,
             mounts_filename,
-            Box::try_new(|inode_id| -> Result<Box<dyn Driver>, CollectionAllocErr> {
+            Box::try_new(|inode_id| -> Result<Box<dyn Driver>, TryReserveError> {
                 Ok(Box::try_new(mounts::MountsDriver::new(inode_id))? as Box<dyn Driver>)
             })?,
             owning,
@@ -343,7 +343,7 @@ impl ProcFs {
         self.register_file(
             tty_dir_id,
             drivers_filename,
-            Box::try_new(|inode_id| -> Result<Box<dyn Driver>, CollectionAllocErr> {
+            Box::try_new(|inode_id| -> Result<Box<dyn Driver>, TryReserveError> {
                 Ok(Box::try_new(tty_drivers::TtyDriversDriver::new(inode_id))? as Box<dyn Driver>)
             })?,
             owning,
@@ -473,7 +473,7 @@ impl ProcFs {
             dir_id,
             stat_filename,
             Box::try_new(
-                move |inode_id| -> Result<Box<dyn Driver>, CollectionAllocErr> {
+                move |inode_id| -> Result<Box<dyn Driver>, TryReserveError> {
                     Ok(Box::try_new(StatDriver::new(inode_id, pid))? as Box<dyn Driver>)
                 },
             )?,
@@ -488,7 +488,7 @@ impl ProcFs {
             dir_id,
             environ_filename,
             Box::try_new(
-                move |inode_id| -> Result<Box<dyn Driver>, CollectionAllocErr> {
+                move |inode_id| -> Result<Box<dyn Driver>, TryReserveError> {
                     Ok(Box::try_new(EnvironDriver::new(inode_id, pid))? as Box<dyn Driver>)
                 },
             )?,
@@ -499,7 +499,7 @@ impl ProcFs {
             dir_id,
             cmdline_filename,
             Box::try_new(
-                move |inode_id| -> Result<Box<dyn Driver>, CollectionAllocErr> {
+                move |inode_id| -> Result<Box<dyn Driver>, TryReserveError> {
                     Ok(Box::try_new(CmdlineDriver::new(inode_id, pid))? as Box<dyn Driver>)
                 },
             )?,
@@ -510,7 +510,7 @@ impl ProcFs {
             dir_id,
             comm_filename,
             Box::try_new(
-                move |inode_id| -> Result<Box<dyn Driver>, CollectionAllocErr> {
+                move |inode_id| -> Result<Box<dyn Driver>, TryReserveError> {
                     Ok(Box::try_new(CommDriver::new(inode_id, pid))? as Box<dyn Driver>)
                 },
             )?,
@@ -521,7 +521,7 @@ impl ProcFs {
             dir_id,
             status_filename,
             Box::try_new(
-                move |inode_id| -> Result<Box<dyn Driver>, CollectionAllocErr> {
+                move |inode_id| -> Result<Box<dyn Driver>, TryReserveError> {
                     Ok(Box::try_new(StatusDriver::new(inode_id, pid))? as Box<dyn Driver>)
                 },
             )?,

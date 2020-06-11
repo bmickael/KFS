@@ -213,7 +213,7 @@ pub struct Page<T: Address> {
 }
 
 impl<T: Address> fallible_collections::TryClone for Page<T> {
-    fn try_clone(&self) -> core::result::Result<Self, alloc::collections::CollectionAllocErr> {
+    fn try_clone(&self) -> core::result::Result<Self, alloc::collections::TryReserveError> {
         Ok(*self)
     }
 }
