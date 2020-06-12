@@ -16,7 +16,7 @@ screen = { path = "../screen" }
 sync = { path = "../sync" }
 
 [dependencies.arrayvec]
-version = "0.4.11"
+version = "0.5.1"
 default_features = false
 
 [dependencies.lazy_static]

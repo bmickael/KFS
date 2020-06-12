@@ -3,6 +3,10 @@
 
 extern crate alloc;
 
+#[macro_use]
+pub mod uart_16550;
+pub use uart_16550::UART_16550;
+
 pub mod bmp_loader;
 mod vbe_mode;
 mod vga_text_mode;
@@ -68,6 +72,10 @@ pub enum DrawingMode {
 impl ScreenMonad {
     /// default is vga
     pub fn new() -> Self {
+        #[cfg(feature = "serial-eprintln")]
+        unsafe {
+            UART_16550.init()
+        };
         let vga = VgaTextMode::new();
         let size = vga.query_window_size();
         Self {
@@ -78,6 +86,8 @@ impl ScreenMonad {
     /// Switch between VBE mode
     pub fn switch_graphic_mode(&mut self, mode: u16) -> Result<(), VbeError> {
         let vbe = init_graphic_mode(mode)?;
+        #[cfg(feature = "serial-eprintln")]
+        serial_println!("{:#?}", vbe);
         self.size = vbe.query_window_size();
         self.drawing_mode = DrawingMode::Vbe(vbe);
         Ok(())

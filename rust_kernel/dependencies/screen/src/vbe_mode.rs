@@ -10,7 +10,7 @@ use alloc::vec;
 use alloc::vec::Vec;
 use ansi_escape_code::AnsiColor;
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct VbeMode {
     /// linear frame buffer address
     linear_frame_buffer: LinearFrameBuffer,
@@ -38,6 +38,44 @@ pub struct VbeMode {
     mode_info: ModeInfo,
     /// Some informations about how the screen manage display
     crtc_info: Option<CrtcInfo>,
+}
+
+use core::fmt;
+
+impl fmt::Debug for VbeMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(
+            f,
+            "linear frame buffer virt location: {:#?}",
+            self.linear_frame_buffer
+        )?;
+        writeln!(
+            f,
+            "db_frame_buffer virt location: {:#?}",
+            self.db_frame_buffer.as_ptr()
+        )?;
+        writeln!(
+            f,
+            "graphic buffer virt location: {:#?}",
+            self.graphic_buffer.as_ptr()
+        )?;
+        writeln!(
+            f,
+            "display: {} * {} * {} of pitch {}",
+            self.width,
+            self.height,
+            self.bytes_per_pixel * 8,
+            self.pitch
+        )?;
+        writeln!(
+            f,
+            "char px: {} * {}, colums: {}, lines: {}",
+            self.char_width, self.char_height, self.columns, self.lines
+        )?;
+        writeln!(f, "mode_info: {:#?}", self.mode_info)?;
+        writeln!(f, "crtc_info: {:#?}", self.crtc_info)?;
+        Ok(())
+    }
 }
 
 #[derive(Debug, Copy, Clone)]
@@ -175,6 +213,8 @@ impl Drawer for VbeMode {
 impl AdvancedGraphic for VbeMode {
     /// refresh framebuffer
     fn refresh_screen(&mut self) {
+        #[cfg(feature = "serial-eprintln")]
+        serial_println!("Refreshing screen...");
         unsafe {
             _sse2_memcpy(
                 self.linear_frame_buffer.0,

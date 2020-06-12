@@ -88,6 +88,10 @@ macro_rules! println {
 #[macro_export]
 macro_rules! print_syslog {
     ($($arg:tt)*) => ({
+		#[cfg(feature = "serial-eprintln")]
+		{
+			($crate::serial_print!($($arg)*));
+		}
         match format_args!($($arg)*) {
             a => {
                 use core::fmt::Write;

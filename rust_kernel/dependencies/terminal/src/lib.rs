@@ -5,7 +5,10 @@
 extern crate alloc;
 
 #[macro_use]
-mod macros;
+pub mod macros;
+#[macro_use]
+pub mod uart_16550;
+pub use uart_16550::UART_16550;
 
 pub mod early_terminal;
 pub use early_terminal::EarlyTerminal;
@@ -24,10 +27,6 @@ use line_discipline::LineDiscipline;
 pub use line_discipline::ReadResult;
 
 pub mod log;
-
-#[macro_use]
-pub mod uart_16550;
-pub use uart_16550::UART_16550;
 
 use alloc::boxed::Box;
 use alloc::collections::BTreeMap;
@@ -103,19 +102,28 @@ impl Terminal {
         } else {
             None
         };
+        #[cfg(feature = "serial-eprintln")]
+        {
+            serial_println!(
+                "alloced graphic buffer at {:#?}",
+                v.as_ref().unwrap().as_ptr()
+            );
+        }
 
         // TODO: Must protect from MAX_TTY_IDX, already added tty and memory
         let size = screen_monad.query_window_size();
-        self.ttys.insert(
-            index,
-            Box::new(LineDiscipline::new(BufferedTty::new(Tty::new(
-                false,
-                size.line,
-                size.column,
-                MAX_SCREEN_BUFFER,
-                v,
-            )))),
-        );
+        let b = Box::new(LineDiscipline::new(BufferedTty::new(Tty::new(
+            false,
+            size.line,
+            size.column,
+            MAX_SCREEN_BUFFER,
+            v,
+        ))));
+        #[cfg(feature = "serial-eprintln")]
+        {
+            serial_println!("big box at {:p}", b);
+        }
+        self.ttys.insert(index, b);
         index
     }
 
@@ -198,18 +206,33 @@ impl Terminal {
                 NoControlInput => {
                     let tty = self.get_foreground_tty();
 
-                    if tty.is_raw_mode() {
-                        tty.handle_scancode(scancode).expect("write input failed");
-                    } else {
-                        tty.handle_key_pressed(keysymb).expect("write input failed");
+                    //tty.handle_scancode(scancode).expect("write input failed");
+                    #[cfg(feature = "serial-eprintln")]
+                    {
+                        if tty.is_raw_mode() {
+                            match tty.handle_scancode(scancode) {
+                                Ok(_size) => serial_println!("read buffer len: {}", _size),
+                                Err(_e) => serial_println!("handle_key_pressed: {}", _e),
+                            }
+                        } else {
+                            serial_println!("Not on raw mode");
+                            tty.handle_key_pressed(keysymb).expect("write input failed");
+                        }
                     }
                     None
                 }
             }
         } else {
-            self.get_foreground_tty()
-                .handle_scancode(scancode)
-                .expect("write input failed");
+            //self.get_foreground_tty()
+            //    .handle_scancode(scancode)
+            //    .expect("write input failed");
+            #[cfg(feature = "serial-eprintln")]
+            {
+                match self.get_foreground_tty().handle_scancode(scancode) {
+                    Ok(_size) => serial_println!("read buffer len: {}", _size),
+                    Err(_e) => serial_println!("handle_key_pressed: {}", _e),
+                }
+            }
             None
         }
     }

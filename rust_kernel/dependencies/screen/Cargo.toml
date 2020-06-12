@@ -9,7 +9,11 @@ documentation = "cargo doc --open"
 homepage = "index.html"
 
 [dependencies]
+bitflags = "1.0.4"
 raw_data = { path = "../raw_data" }
 i386 = { path = "../i386" }
 ansi_escape_code = { path = "../ansi_escape_code" }
 io = { path = "../io" }
+
+[features]
+serial-eprintln = []

@@ -142,7 +142,19 @@ impl VirtualPageAllocator {
 
             match res {
                 Ok(_) => (),
-                Err(MemoryError::OutOfBound) => (), //Todo fix this eventually ?
+                Err(MemoryError::OutOfBound) => {
+                #[cfg(feature = "serial-eprintln")]
+                {
+                    let vaddr: Virt = vaddr.into();
+                    let paddr: Phys = paddr.into();
+                    let size: usize = size.into();
+                    serial_println!(
+                        "MemoryError::OutOfBound ignored ! Phys: {:#?}, Virt: {:#?}, size: {:?}",
+                        paddr,
+                        vaddr,
+                        size
+                    );
+                }} //Todo fix this eventually ?
                 Err(e) => {
                     self.virt
                         .free_reserve(vaddr, size.into())

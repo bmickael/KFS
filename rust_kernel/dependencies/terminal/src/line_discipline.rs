@@ -1,4 +1,5 @@
 use super::tty::{BufferedTty, Scroll, Tty};
+use alloc::boxed::Box;
 use ansi_escape_code::CursorMove;
 use arrayvec::{ArrayVec, CapacityError};
 use core::cmp::min;
@@ -36,6 +37,11 @@ pub enum ReadResult {
 
 impl LineDiscipline {
     pub fn new(tty: BufferedTty) -> Self {
+        let a = ArrayVec::new();
+        #[cfg(feature = "serial-eprintln")]
+        {
+            serial_println!("arrayvec at {:p}", a.as_ptr());
+        }
         Self {
             termios: termios {
                 c_iflag: 0,
@@ -57,7 +63,7 @@ impl LineDiscipline {
                 ],
             },
             tty,
-            read_buffer: ArrayVec::new(),
+            read_buffer: a,
             foreground_process_group: 0,
             end_of_file_set: false,
             is_raw_mode: false,
@@ -78,15 +84,17 @@ impl LineDiscipline {
         true
     }
 
-    pub fn handle_scancode(&mut self, scancode: ScanCode) -> Result<(), CapacityError<u8>> {
+    pub fn handle_scancode(&mut self, scancode: ScanCode) -> Result<usize, CapacityError<u8>> {
         if self.is_raw_mode {
             // let keycode = KeyCode::from_scancode(scancode);
             // dbg!(keycode);
             self.read_buffer.try_push((scancode & 0xff) as u8)?;
             self.read_buffer
                 .try_push(((scancode & 0xff00) >> 8) as u8)?;
+            Ok(self.read_buffer.len())
+        } else {
+            Ok(0)
         }
-        Ok(())
     }
     /// write in the read buffer the keysymb read from the keyboard
     /// Send a message if read is ready, depending of the lmode

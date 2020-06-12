@@ -42,7 +42,7 @@ _init_kernel:
 
 	; Initialize advanced features
 	call _set_sse
-	call _set_avx
+	; call _set_avx
 	call _set_fpu
 
 	; Enable Write-Protection on pages: CR0.BIT16 When set, the CPU can't write to read-only pages when privilege level is 0
