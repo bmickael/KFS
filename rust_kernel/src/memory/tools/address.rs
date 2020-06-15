@@ -2,6 +2,7 @@
 use super::NbrPages;
 use super::PAGE_SIZE;
 use bit_field::BitField;
+use core::fmt;
 use core::fmt::Debug;
 use core::ops::{Add, AddAssign, Range, RangeInclusive, Sub, SubAssign};
 use fallible_collections::TryClone;
@@ -137,6 +138,12 @@ impl SubAssign<usize> for Virt {
     }
 }
 
+impl fmt::Pointer for Virt {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Virt: {:#010X}", self.0)
+    }
+}
+
 impl Address for Virt {}
 
 /// New type representing a Physical Adress
@@ -198,6 +205,12 @@ impl AddAssign<usize> for Phys {
 impl SubAssign<usize> for Phys {
     fn sub_assign(&mut self, other: usize) {
         *self = *self - other
+    }
+}
+
+impl fmt::Pointer for Phys {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Phys: {:#010X}", self.0)
     }
 }
 

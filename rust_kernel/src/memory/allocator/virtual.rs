@@ -143,18 +143,14 @@ impl VirtualPageAllocator {
             match res {
                 Ok(_) => (),
                 Err(MemoryError::OutOfBound) => {
-                #[cfg(feature = "serial-eprintln")]
-                {
-                    let vaddr: Virt = vaddr.into();
-                    let paddr: Phys = paddr.into();
-                    let size: usize = size.into();
+                    #[cfg(feature = "serial-eprintln")]
                     serial_println!(
-                        "MemoryError::OutOfBound ignored ! Phys: {:#?}, Virt: {:#?}, size: {:?}",
-                        paddr,
-                        vaddr,
-                        size
+                        "MemoryError::OutOfBound ignored ! {:p}, {:p}, size: {:?}",
+                        Into::<Phys>::into(paddr),
+                        Into::<Virt>::into(vaddr),
+                        Into::<usize>::into(size)
                     );
-                }} //Todo fix this eventually ?
+                } //Todo fix this eventually ?
                 Err(e) => {
                     self.virt
                         .free_reserve(vaddr, size.into())
@@ -165,6 +161,16 @@ impl VirtualPageAllocator {
             self.mmu
                 .map_range_page(vaddr, paddr, size, Entry::READ_WRITE | Entry::PRESENT)?;
         }
+        #[cfg(feature = "serial-eprintln")]
+        {
+            serial_println!(
+                "reserve -> {:p}, {:p}, size: {}",
+                Into::<Phys>::into(paddr),
+                Into::<Virt>::into(vaddr),
+                Into::<usize>::into(size)
+            );
+        }
+
         Ok(())
     }
 
@@ -191,6 +197,15 @@ impl VirtualPageAllocator {
                         .expect("Could not free memory on VirtualPageAllocator");
                     e
                 })?;
+        }
+        #[cfg(feature = "serial-eprintln")]
+        {
+            serial_println!(
+                "map_addr -> {:p}, {:p}, size: {}",
+                Into::<Phys>::into(paddr),
+                Into::<Virt>::into(vaddr),
+                Into::<usize>::into(size)
+            );
         }
         Ok(vaddr)
     }
@@ -222,7 +237,19 @@ impl VirtualPageAllocator {
         }
 
         // unmap this vitual chunk
-        unsafe { self.mmu.unmap_range_page(vaddr, order.into()) }
+        unsafe {
+            self.mmu.unmap_range_page(vaddr, order.into())?;
+        }
+        #[cfg(feature = "serial-eprintln")]
+        {
+            serial_println!(
+                "unmap_addr -> {:p}, {:p}, size: {}",
+                Into::<Phys>::into(page_paddr),
+                Into::<Virt>::into(vaddr),
+                Into::<usize>::into(size)
+            );
+        }
+        Ok(())
     }
 
     pub fn alloc_on(
@@ -236,7 +263,7 @@ impl VirtualPageAllocator {
         let entry = Entry::from(flags) | Entry::PRESENT;
 
         self.virt.reserve_exact(vaddr, order)?;
-        unsafe {
+        let paddr = unsafe {
             let paddr = physical_allocator.alloc(size, flags).map_err(|e| {
                 self.virt.free_reserve(vaddr, order).expect(
                     "Failed to free allocated virtual page after physical allocator failed",
@@ -254,6 +281,16 @@ impl VirtualPageAllocator {
                         .expect("Could not free memory on PhysicalAllocator");
                     e
                 })?;
+            paddr
+        };
+        #[cfg(feature = "serial-eprintln")]
+        {
+            serial_println!(
+                "alloc_on -> {:p}, {:p}, size: {}",
+                Into::<Phys>::into(paddr),
+                Into::<Virt>::into(vaddr),
+                Into::<usize>::into(size)
+            );
         }
         Ok(vaddr.into())
     }
@@ -276,7 +313,19 @@ impl VirtualPageAllocator {
             .expect("never allocated");
 
         // unmap this vitual chunk
-        unsafe { self.mmu.unmap_range_page(vaddr, order.into()) }
+        unsafe {
+            self.mmu.unmap_range_page(vaddr, order.into())?;
+        }
+        #[cfg(feature = "serial-eprintln")]
+        {
+            serial_println!(
+                "dealloc_on -> {:p}, {:p}, size: {}",
+                Into::<Phys>::into(page_paddr),
+                Into::<Virt>::into(vaddr),
+                Into::<usize>::into(size)
+            );
+        }
+        Ok(())
     }
 
     pub fn alloc(&mut self, size: NbrPages, flags: AllocFlags) -> Result<Page<Virt>> {
@@ -285,7 +334,7 @@ impl VirtualPageAllocator {
         let physical_allocator = unsafe { PHYSICAL_ALLOCATOR.as_mut().unwrap() };
         let entry = Entry::from(flags) | Entry::PRESENT;
 
-        unsafe {
+        let paddr = unsafe {
             let paddr = physical_allocator.alloc(size, flags).map_err(|e| {
                 self.virt.free(vaddr, order).expect(
                     "Failed to free allocated virtual page after physical allocator failed",
@@ -303,6 +352,16 @@ impl VirtualPageAllocator {
                         .expect("Could not free memory on PhysicalAllocator");
                     e
                 })?;
+            paddr
+        };
+        #[cfg(feature = "serial-eprintln")]
+        {
+            serial_println!(
+                "alloc -> {:p}, {:p}, size: {}",
+                Into::<Phys>::into(paddr),
+                Into::<Virt>::into(vaddr),
+                Into::<usize>::into(size)
+            );
         }
         Ok(vaddr.into())
     }
@@ -321,6 +380,14 @@ impl VirtualPageAllocator {
                         .expect("Failed to free virtual page after mapping failed");
                     e
                 })?;
+        }
+        #[cfg(feature = "serial-eprintln")]
+        {
+            serial_println!(
+                "valloc -> {:p}, size: {}",
+                Into::<Virt>::into(vaddr),
+                Into::<usize>::into(size)
+            );
         }
         Ok(vaddr)
     }
@@ -378,6 +445,15 @@ impl VirtualPageAllocator {
                     unsafe { self.mmu.unmap_range_page(vaddr, size)? }
                 }
                 Ok(())
-            })
+            })?;
+        #[cfg(feature = "serial-eprintln")]
+        {
+            serial_println!(
+                "free -> {:p}, size: {}",
+                Into::<Virt>::into(vaddr),
+                Into::<usize>::into(size)
+            );
+        }
+        Ok(())
     }
 }
