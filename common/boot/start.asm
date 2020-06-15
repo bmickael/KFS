@@ -19,6 +19,9 @@ extern alt_init_paging
 %define MAGIC     0x1BADB002
 %define CHECKSUM  - (MAGIC + FLAGS)
 
+; Port of UART
+%define UART 0x3f8
+
 ; Declare a header as in the Multiboot Standard.
 ; You don't need to understand all these details as it is just magic values that
 ; is documented in the multiboot standard. The bootloader will search for this
@@ -85,12 +88,20 @@ _init:
 	mov esp, temporary_stack - 8
 	mov ebp, esp
 
+	call _enable_uart
+
+	mov esi, str_multiboot_info
+	call _uart_dbg
+
 	; Store the multiboot info structure pointed by EBX (avoid accidental erasing)
 	mov edi, multiboot_infos
 	mov esi, ebx
 	mov ecx, MULTIBOOT_INFOS_LEN
 	cld
 	rep movsb
+
+	mov esi, str_gdt_renew
+	call _uart_dbg
 
 	; Set up a early GDT
 	; reserve 8 bytes for structure pointer (need six bytes)
@@ -119,10 +130,16 @@ _init:
 	jmp 0x8: .set_protected_cs
 .set_protected_cs:
 
+	mov esi, str_tss_load
+	call _uart_dbg
+
 	; load the TSS segment
 	; Will be used when will switch to ring 0 from ring 3
 	mov ax, 0x38
 	ltr ax
+
+	mov esi, str_idt_build
+	call _uart_dbg
 
 	; Set up a early IDT
 	; reserve 8 bytes for structure pointer (need six bytes)
@@ -136,30 +153,130 @@ _init:
 
 	add esp, 8 + 4
 
+	mov esi, str_init_watchdog
+	call _uart_dbg
+
 	; set watchdog
 	call alt_guard_all
 
+	mov esi, str_disable_cursor
+	call _uart_dbg
 	call alt_disable_cursor
+
+	mov esi, str_clear_screen
+	call _uart_dbg
 	call alt_clear_screen
 
 	; Do ACPI tests
 	; call alt_acpi
 
 	; Get device map in memory and push a pointer to a generated structure
+	mov esi, str_device_map
+	call _uart_dbg
 	call alt_get_device_mem_map
 	push eax
 
 	; Set up the MMU, prepare switching to high half memory
+	mov esi, str_init_paging
+	call _uart_dbg
 	call alt_init_paging
 
 	; Push the grub multiboot header
 	push multiboot_infos
 
 	; Call _init_kernel located in high memory !
+	mov esi, str_jump_high_mem
+	call _uart_dbg
 	call _init_kernel
 
 	; A long jump can give a adrenaline boost, i dont understand why ...
 	; call 0x8:_init_kernel
+
+_enable_uart:
+	push ebp
+	mov ebp, esp
+	push eax
+	push edx
+
+	; disable all interrupts
+	mov dx, UART + 1
+	xor al, al
+	out dx, al
+
+	; enable DLAB (set baud rate divisor
+	mov dx, UART + 3
+	mov al, 0x80
+	out dx, al
+
+	; Set divisor to 3 (lo byte) 38400 baud
+	mov dx, UART
+	mov al, 0x3
+	out dx, al
+
+	; (hi byte)
+	mov dx, UART + 1
+	xor al, al
+	out dx, al
+
+	; 8 bits, no parity, one stop bit
+	mov dx, UART + 3
+	mov al, 0x3
+	out dx, al
+
+	; Enable FIFO, clear them, with 14-byte threshold
+	mov dx, UART + 2
+	mov al, 0xC7
+	out dx, al
+
+	; IRQs enabled, RTS/DSR set
+	mov dx, UART + 4
+	mov al, 0x1
+	out dx, al
+
+	mov esi, str_uart_init
+	call _uart_dbg
+
+	pop edx
+	pop eax
+	pop ebp
+	ret
+
+_uart_dbg:
+	push ebp
+	mov ebp, esp
+	pushad
+
+.check_empty:
+	mov dx, UART + 5
+	in al, dx
+	and al, 0x20
+	cmp al, 0x0
+	je .check_empty
+
+.dump_string:
+	lodsb
+	cmp al, 0x0
+	je .dump_end
+	mov dx, UART
+	out dx, al
+	jmp .dump_string
+
+.dump_end:
+	popad
+	pop ebp
+	ret
+
+str_uart_init: db "Early UART initialized", 10, 0
+str_multiboot_info: db "Extracting multiboot info", 10, 0
+str_gdt_renew: db "Creating early GDT", 10, 0
+str_tss_load: db "Loading TSS", 10, 0
+str_idt_build: db "Creating early IDT", 10, 0
+str_init_watchdog: db "Initialization of watchdog", 10, 0
+str_disable_cursor:	db "Disable cursor", 10, 0
+str_clear_screen: db "Clear screen", 10, 0
+str_device_map: db "Memory device mapping", 10, 0
+str_init_paging: db "Initialization of paging", 10, 0
+str_jump_high_mem: db "jump to high memory", 10, 0
 
 align 16
 ; 4ko for a temporary stack
