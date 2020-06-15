@@ -7,8 +7,8 @@ export CROSS="$ROOT_TOOLCHAIN/cross"
 export LIBC_DIR="libc"
 export HOST_TRIPLET="`gcc -dumpmachine`"
 
-sudo mkdir -pv $ROOT_TOOLCHAIN
-sudo chown $USER:$USER $ROOT_TOOLCHAIN
+mkdir -pv $ROOT_TOOLCHAIN
+chown $USER:$USER $ROOT_TOOLCHAIN
 mkdir -pv $TOOLCHAIN_SYSROOT $CROSS
 mkdir -pv $TOOLCHAIN_SYSROOT/usr
 mkdir -pv $TOOLCHAIN_SYSROOT/usr/{lib,include}
@@ -41,7 +41,6 @@ cd ../..
 
 # CROSS COMPILE GCC
 echo 'WARNING: you must make install on libc to install the headers before compiling gcc'
-sudo apt install g++ libmpc-dev libmpfr-dev libgmp-dev
 wget -c 'https://ftp.gnu.org/gnu/gcc/gcc-9.1.0/gcc-9.1.0.tar.xz'
 tar -xf 'gcc-9.1.0.tar.xz'
 patch -p0 < patch-gcc
