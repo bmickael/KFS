@@ -36,11 +36,6 @@ pub enum ReadResult {
 
 impl LineDiscipline {
     pub fn new(tty: BufferedTty) -> Self {
-        let a = ArrayVec::new();
-        #[cfg(feature = "serial-eprintln")]
-        {
-            serial_println!("arrayvec at {:p}", a.as_ptr());
-        }
         Self {
             termios: termios {
                 c_iflag: 0,
@@ -62,7 +57,7 @@ impl LineDiscipline {
                 ],
             },
             tty,
-            read_buffer: a,
+            read_buffer: ArrayVec::new(),
             foreground_process_group: 0,
             end_of_file_set: false,
             is_raw_mode: false,
