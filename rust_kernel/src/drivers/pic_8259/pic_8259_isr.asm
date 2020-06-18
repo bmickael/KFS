@@ -4,6 +4,7 @@
 ;; See https://wiki.osdev.org/ISR
 
 extern generic_interrupt_handler
+extern _align_stack
 
 segment .data
 
@@ -164,9 +165,11 @@ _isr_%2:
 	mov ebp, esp
 	pushad
 	push isr_%2_str
+	push 4
 	mov eax, dword [_pic_handlers_array + %4 * 4]
-	call eax
-	add esp, 4 ; pop interrupt string
+	push eax
+	call _align_stack
+	add esp, 12 ; pop interrupt string
 	%1
 	popad
 	pop ebp

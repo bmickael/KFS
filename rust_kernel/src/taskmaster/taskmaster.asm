@@ -1,6 +1,7 @@
 [BITS 32]
 
 extern syscall_interrupt_handler
+extern _align_stack
 
 segment .data
 
@@ -113,7 +114,10 @@ _isr_syscall:
 	sub esp, 8 ; skip err code & cpu isr fields
 	STORE_CONTEXT
 
-	call syscall_interrupt_handler
+	push 4
+	push syscall_interrupt_handler
+	call _align_stack
+
 	; Set the new stack pointer
 	mov esp, eax
 
@@ -130,7 +134,10 @@ _schedule_next:
 	sub esp, 8 ; skip err code & cpu isr fields
 	STORE_CONTEXT
 
-	call scheduler_interrupt_handler
+	push 4
+	push scheduler_interrupt_handler
+	call _align_stack
+
 	; Set the new stack pointer
 	mov esp, eax
 
@@ -166,7 +173,11 @@ _schedule_force_preempt:
 	sub esp, 8 ; skip err code & cpu isr fields
 	STORE_CONTEXT
 	call _preemptible
-	call scheduler_interrupt_handler
+
+	push 4
+	push scheduler_interrupt_handler
+	call _align_stack
+
 	; Set the new stack pointer
 	mov esp, eax
 
@@ -187,7 +198,10 @@ _cpu_isr_%2:
 	push %1 ; push the isr number
 
 	STORE_CONTEXT
-	call cpu_isr_interrupt_handler
+	push 4
+	push cpu_isr_interrupt_handler
+	call _align_stack
+
 	; Set the new stack pointer
 	mov esp, eax
 
@@ -202,7 +216,10 @@ _cpu_isr_%2:
 	push %1 ; push the isr number
 
 	STORE_CONTEXT
-	call cpu_isr_interrupt_handler
+	push 4
+	push cpu_isr_interrupt_handler
+	call _align_stack
+
 	; Set the new stack pointer
 	mov esp, eax
 

@@ -157,7 +157,7 @@ _init:
 	call _uart_dbg
 
 	; set watchdog
-	call alt_guard_all
+	; call alt_guard_all
 
 	mov esi, str_disable_cursor
 	call _uart_dbg

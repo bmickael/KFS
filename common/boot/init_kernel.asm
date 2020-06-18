@@ -4,6 +4,7 @@ segment .text
 
 extern alt_check_all
 
+extern _align_stack
 extern kmain
 
 extern _set_sse
@@ -51,10 +52,12 @@ _init_kernel:
 	; mov cr0, eax
 
 	; Ask watchdog if all is okay
-	call alt_check_all
+	; call alt_check_all
 
 	; And finally go into the kernel !
-	call kmain
+	push 8
+	push kmain
+	call _align_stack
 
 	add esp, 8
 
