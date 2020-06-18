@@ -824,7 +824,7 @@ impl Ext2Filesystem {
         offset_end += blocknumber_per_block as u64;
         if block_off >= offset_start && block_off < offset_end {
             let off = block_off - offset_start;
-            let singly_indirect = err_if_zero({ inode.singly_indirect_block_pointers })?;
+            let singly_indirect = err_if_zero(inode.singly_indirect_block_pointers)?;
 
             let addr = self.to_addr(singly_indirect);
             let pointer = self.get_pointer(addr, off, Level::L1)?;
@@ -836,7 +836,7 @@ impl Ext2Filesystem {
         offset_end += (blocknumber_per_block * blocknumber_per_block) as u64;
         if block_off >= offset_start && block_off < offset_end {
             let off = (block_off - offset_start) >> blocknumber_per_block_shift as u64;
-            let doubly_indirect = err_if_zero({ inode.doubly_indirect_block_pointers })?;
+            let doubly_indirect = err_if_zero(inode.doubly_indirect_block_pointers)?;
 
             let addr = self.to_addr(doubly_indirect);
             let pointer_to_pointer = self.get_pointer(addr, off, Level::L1)?;
@@ -856,7 +856,7 @@ impl Ext2Filesystem {
         if block_off >= offset_start && block_off < offset_end {
             let off =
                 (block_off - offset_start) / (blocknumber_per_block * blocknumber_per_block) as u64;
-            let tripply_indirect = err_if_zero({ inode.triply_indirect_block_pointers })?;
+            let tripply_indirect = err_if_zero(inode.triply_indirect_block_pointers)?;
 
             let addr = self.to_addr(tripply_indirect);
             let pointer_to_pointer_to_pointer = self.get_pointer(addr, off, Level::L1)?;

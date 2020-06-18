@@ -69,7 +69,7 @@ pub fn derive_try_clone(input: proc_macro::TokenStream) -> proc_macro::TokenStre
                     quote!(#name::#variant(#(#fields,)*) => #name::#variant(#(#fields_clone.try_clone()?,)*),)
                 }
                 Fields::Named(fields) => {
-                    let fields = fields.named.iter().map(|x| x.ident.clone());;
+                    let fields = fields.named.iter().map(|x| x.ident.clone());
                     let fields_clone = fields.clone();
                     let fields_clone2 = fields.clone();
                     let variant = x.ident.clone();

@@ -29,7 +29,7 @@ impl Partition {
     pub fn is_used(&self) -> bool {
         // A System ID byte value of 0 is the definitive indicator for
         // an unused entry. from Osdev
-        (self.part_type != PartitionType::Empty)
+        self.part_type != PartitionType::Empty
     }
 }
 

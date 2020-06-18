@@ -1,5 +1,4 @@
 use super::tty::{BufferedTty, Scroll, Tty};
-use alloc::boxed::Box;
 use ansi_escape_code::CursorMove;
 use arrayvec::{ArrayVec, CapacityError};
 use core::cmp::min;

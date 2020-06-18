@@ -304,7 +304,7 @@ impl ConnectedSocketDriver {
         Ok(())
     }
 
-    pub(super) fn accept(&mut self) -> SysResult<IpcResult<(Option<ConnectedSocket>)>> {
+    pub(super) fn accept(&mut self) -> SysResult<IpcResult<Option<ConnectedSocket>>> {
         // If the listen queue is empty of connection requests and
         // O_NONBLOCK is not set on the file descriptor for the socket,
         // accept() shall block until a connection is present.

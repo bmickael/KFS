@@ -142,7 +142,7 @@ impl Dcache {
     pub fn children(
         &self,
         dir_id: DirectoryEntryId,
-    ) -> SysResult<impl Iterator<Item = (&DirectoryEntry)>> {
+    ) -> SysResult<impl Iterator<Item = &DirectoryEntry>> {
         let dcache = self;
         let mut children_iter = self.get_entry(&dir_id)?.get_directory()?.entries();
 

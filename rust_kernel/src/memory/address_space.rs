@@ -284,7 +284,7 @@ impl AddressSpace {
 /// Get the len of a C style *const c_char. Operate in a limited area
 fn safe_strlen(ptr: *const c_char, limit: usize) -> Option<usize> {
     let mut i = 0;
-    while i != limit && unsafe { (*ptr.add(i)) } != 0 {
+    while i != limit && unsafe { *ptr.add(i) } != 0 {
         i += 1;
     }
     if i == limit {
