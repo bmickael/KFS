@@ -23,7 +23,7 @@ pub unsafe extern "C" fn dustman_handler() {
         trash_process();
         _preemptible();
         while DUSTMAN_TRIGGER.compare_and_swap(true, false, Ordering::Relaxed) == false {
-            asm!("hlt");
+            llvm_asm!("hlt");
         }
         // Check if we are really on a unpreemptible state
         assert_eq!(_get_preemptible_state(), 1);
