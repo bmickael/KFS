@@ -263,7 +263,7 @@ impl VirtualPageAllocator {
         let entry = Entry::from(flags) | Entry::PRESENT;
 
         self.virt.reserve_exact(vaddr, order)?;
-        let paddr = unsafe {
+        let _paddr = unsafe {
             let paddr = physical_allocator.alloc(size, flags).map_err(|e| {
                 self.virt.free_reserve(vaddr, order).expect(
                     "Failed to free allocated virtual page after physical allocator failed",
@@ -287,7 +287,7 @@ impl VirtualPageAllocator {
         {
             serial_println!(
                 "alloc_on -> {:p}, {:p}, size: {}",
-                Into::<Phys>::into(paddr),
+                Into::<Phys>::into(_paddr),
                 Into::<Virt>::into(vaddr),
                 Into::<usize>::into(size)
             );
@@ -334,7 +334,7 @@ impl VirtualPageAllocator {
         let physical_allocator = unsafe { PHYSICAL_ALLOCATOR.as_mut().unwrap() };
         let entry = Entry::from(flags) | Entry::PRESENT;
 
-        let paddr = unsafe {
+        let _paddr = unsafe {
             let paddr = physical_allocator.alloc(size, flags).map_err(|e| {
                 self.virt.free(vaddr, order).expect(
                     "Failed to free allocated virtual page after physical allocator failed",
@@ -358,7 +358,7 @@ impl VirtualPageAllocator {
         {
             serial_println!(
                 "alloc -> {:p}, {:p}, size: {}",
-                Into::<Phys>::into(paddr),
+                Into::<Phys>::into(_paddr),
                 Into::<Virt>::into(vaddr),
                 Into::<usize>::into(size)
             );

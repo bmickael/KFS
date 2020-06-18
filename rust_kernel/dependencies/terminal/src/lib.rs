@@ -102,13 +102,6 @@ impl Terminal {
         } else {
             None
         };
-        #[cfg(feature = "serial-eprintln")]
-        {
-            serial_println!(
-                "alloced graphic buffer at {:#?}",
-                v.as_ref().unwrap().as_ptr()
-            );
-        }
 
         // TODO: Must protect from MAX_TTY_IDX, already added tty and memory
         let size = screen_monad.query_window_size();
@@ -119,10 +112,6 @@ impl Terminal {
             MAX_SCREEN_BUFFER,
             v,
         ))));
-        #[cfg(feature = "serial-eprintln")]
-        {
-            serial_println!("big box at {:p}", b);
-        }
         self.ttys.insert(index, b);
         index
     }
@@ -206,7 +195,6 @@ impl Terminal {
                 NoControlInput => {
                     let tty = self.get_foreground_tty();
 
-                    //tty.handle_scancode(scancode).expect("write input failed");
                     #[cfg(feature = "serial-eprintln")]
                     {
                         if tty.is_raw_mode() {
@@ -219,13 +207,18 @@ impl Terminal {
                             tty.handle_key_pressed(keysymb).expect("write input failed");
                         }
                     }
+                    #[cfg(not(feature = "serial-eprintln"))]
+                    {
+                        if tty.is_raw_mode() {
+                            let _size = tty.handle_scancode(scancode).expect("write input failed");
+                        } else {
+                            tty.handle_key_pressed(keysymb).expect("write input failed");
+                        }
+                    }
                     None
                 }
             }
         } else {
-            //self.get_foreground_tty()
-            //    .handle_scancode(scancode)
-            //    .expect("write input failed");
             #[cfg(feature = "serial-eprintln")]
             {
                 match self.get_foreground_tty().handle_scancode(scancode) {
@@ -233,6 +226,10 @@ impl Terminal {
                     Err(_e) => serial_println!("handle_key_pressed: {}", _e),
                 }
             }
+            #[cfg(not(feature = "serial-eprintln"))]
+            self.get_foreground_tty()
+                .handle_scancode(scancode)
+                .expect("write input failed");
             None
         }
     }
