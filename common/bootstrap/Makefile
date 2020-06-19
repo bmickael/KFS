@@ -24,6 +24,7 @@ else
 	CFLAGS = -m32 -std=gnu99 -Wextra -Wall
 endif
 CFLAGS += -fno-builtin -fno-stack-protector -nostdlib -nodefaultlibs -fno-exceptions -nostdinc -fno-pie
+CFLAGS += -march=pentium
 
 IFLAGS = -Iinclude -Ilibft/includes -I./
 

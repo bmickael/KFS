@@ -31,8 +31,8 @@ else
 # -fno-omit-frame-pointer keep good call trace for panic()
 	CFLAGS = -m32 -std=gnu99 -Wextra -Wall -O3 -fno-omit-frame-pointer
 endif
-
 CFLAGS += -fno-builtin -fno-stack-protector -nostdlib -nodefaultlibs -fno-exceptions -nostdinc -fno-pie
+CFLAGS += -march=pentium
 
 IFLAGS = -Iinclude -Ilibft/includes -Ilibasm_i386/includes -I./
 
