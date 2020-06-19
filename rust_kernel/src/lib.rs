@@ -9,6 +9,7 @@
 #![feature(vec_remove_item)]
 #![feature(const_fn)]
 #![feature(drain_filter)]
+#![feature(core_intrinsics)]
 
 #[macro_use]
 extern crate fallible_collections;

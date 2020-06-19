@@ -472,24 +472,20 @@ mod test {
     use core::ffi::c_void;
     #[test]
     fn sodo_allocator() {
-        use std::alloc::{Alloc, Global, Layout, System};
+        use std::alloc::{Global, GlobalAlloc, Layout, System};
 
         const NB_ALLOC: usize = 50000 / 10;
         let mut allocator: System = System;
 
         const NB_BLOCK: usize = 0x10000;
         let address_space = unsafe {
-            allocator
-                .alloc(Layout::from_size_align(NB_BLOCK * PAGE_SIZE, PAGE_SIZE).unwrap())
-                .unwrap()
+            allocator.alloc(Layout::from_size_align(NB_BLOCK * PAGE_SIZE, PAGE_SIZE).unwrap())
+            // .unwrap()
         };
         const MAX_ORDER: usize = NB_BLOCK.trailing_zeros() as usize;
 
-        let mut buddy_allocator: BuddyAllocator<Virt> = BuddyAllocator::new(
-            Virt(address_space.as_ptr() as usize).into(),
-            NbrPages(NB_BLOCK),
-        )
-        .unwrap();
+        let mut buddy_allocator: BuddyAllocator<Virt> =
+            BuddyAllocator::new(Virt(address_space as usize).into(), NbrPages(NB_BLOCK)).unwrap();
 
         // buddy_allocator.reserve_exact(Virt(address_space.as_ptr() as usize).into(), NbrPages(12));
 
@@ -590,8 +586,8 @@ mod test {
                 2 => {
                     let order = Order(srand::<usize>(MAX_ORDER / 2 - 1));
                     let rand_max = (NB_BLOCK * PAGE_SIZE) / (order.nbr_pages().0 * PAGE_SIZE);
-                    let addr = address_space.as_ptr() as usize
-                        + srand::<usize>(rand_max - 1) * order.nbr_bytes();
+                    let addr =
+                        address_space as usize + srand::<usize>(rand_max - 1) * order.nbr_bytes();
 
                     let nb_page = 1 << order.0;
 
