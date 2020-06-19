@@ -52,7 +52,7 @@ _init_kernel:
 	; mov cr0, eax
 
 	; Ask watchdog if all is okay
-	; call alt_check_all
+	call alt_check_all
 
 	; And finally go into the kernel !
 	push 8
