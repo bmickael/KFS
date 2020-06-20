@@ -43,8 +43,7 @@ rtc_toolkit = { path = "dependencies/rtc_toolkit" }
 screen = { path = "dependencies/screen" }
 
 [dependencies.fallible_collections]
-#version = "0.1.2"
-git = "https://github.com/sclolus/fallible_collections"
+version = "0.1.3"
 features = ["unstable"]
 
 [dependencies.itertools]

@@ -96,7 +96,7 @@ version = "0.1.0"
 dependencies = [
  "bit_field 0.9.0",
  "bitflags",
- "fallible_collections 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "fallible_collections",
  "libc_binding",
  "rand",
  "terminal",
@@ -104,17 +104,9 @@ dependencies = [
 
 [[package]]
 name = "fallible_collections"
-version = "0.1.2"
-source = "git+https://github.com/sclolus/fallible_collections#a0ffcb0bbb6c1a0d05ba4ba6c628637d62d5566a"
-dependencies = [
- "hashbrown",
-]
-
-[[package]]
-name = "fallible_collections"
-version = "0.1.2"
+version = "0.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d4ab02c15f833c35f98e54940359ab4e3b82879ee69d46b50674b908ba030306"
+checksum = "ba3301bcde54d3fc19c626ff4bf962630fe1f94cb6cdc3f18a26727a2d1f4a67"
 dependencies = [
  "hashbrown",
 ]
@@ -523,7 +515,7 @@ version = "0.1.0"
 name = "try_clone_derive"
 version = "0.1.0"
 dependencies = [
- "fallible_collections 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "fallible_collections",
  "proc-macro2",
  "proc-quote",
  "syn 0.15.44",
@@ -541,7 +533,7 @@ dependencies = [
  "derive_is_enum_variant",
  "elf_loader",
  "ext2",
- "fallible_collections 0.1.2 (git+https://github.com/sclolus/fallible_collections)",
+ "fallible_collections",
  "i386",
  "interrupts",
  "io",
