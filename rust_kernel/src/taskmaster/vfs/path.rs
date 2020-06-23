@@ -4,7 +4,7 @@ use alloc::vec::Vec;
 use core::cmp::Ordering;
 use core::convert::{TryFrom, TryInto};
 use core::fmt;
-use fallible_collections::FallibleVec;
+use fallible_collections::{FallibleVec, TryReserveError};
 use libc_binding::{c_char, Errno};
 use try_clone_derive::TryClone;
 
@@ -191,9 +191,16 @@ impl Path {
 }
 
 /// Newtype of filename
-#[derive(Copy, Clone, TryClone)]
+#[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Filename(pub [c_char; NAME_MAX as usize + 1], pub usize);
+
+// TryClone boilerplate
+impl fallible_collections::TryClone for Filename {
+    fn try_clone(&self) -> Result<Self, TryReserveError> {
+        Ok(*self)
+    }
+}
 
 impl TryFrom<&str> for Filename {
     type Error = Errno;
