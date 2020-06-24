@@ -513,8 +513,8 @@ impl BufferedTty {
             let buf = alloc_user_mem(len)?;
             Ok(local_buffer {
                 buf,
-                len: len.try_into().unwrap(),
-                bpp: bpp.try_into().unwrap(),
+                len: len.try_into().expect("len overflow"),
+                bpp: bpp.try_into().expect("bpp overflow"),
             })
         } else {
             Err(())

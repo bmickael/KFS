@@ -1,6 +1,5 @@
 //! This crate provide a small brief about IRQ
 #![cfg_attr(not(test), no_std)]
-#![feature(asm)]
 #![feature(llvm_asm)]
 #![feature(slice_index_methods)]
 

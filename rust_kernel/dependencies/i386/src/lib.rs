@@ -1,6 +1,5 @@
 #![cfg_attr(not(test), no_std)]
 #![feature(stdsimd)]
-#![feature(asm)]
 #![feature(llvm_asm)]
 
 use bit_field::BitField;
