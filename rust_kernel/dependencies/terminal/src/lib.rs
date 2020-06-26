@@ -6,8 +6,10 @@ extern crate alloc;
 
 #[macro_use]
 pub mod macros;
+#[cfg(feature = "serial-eprintln")]
 #[macro_use]
 pub mod uart_16550;
+#[cfg(feature = "serial-eprintln")]
 pub use uart_16550::UART_16550;
 
 pub mod early_terminal;
@@ -105,14 +107,14 @@ impl Terminal {
 
         // TODO: Must protect from MAX_TTY_IDX, already added tty and memory
         let size = screen_monad.query_window_size();
-        let b = Box::new(LineDiscipline::new(BufferedTty::new(Tty::new(
+        let line_discipline = Box::new(LineDiscipline::new(BufferedTty::new(Tty::new(
             false,
             size.line,
             size.column,
             MAX_SCREEN_BUFFER,
             v,
         ))));
-        self.ttys.insert(index, b);
+        self.ttys.insert(index, line_discipline);
         index
     }
 
