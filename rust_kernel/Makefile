@@ -115,6 +115,7 @@ cargo_features := $(features)
 
 ifeq ($(serial-eprintln), yes)
 cargo_features += serial-eprintln
+ASMFLAGS += -DEARLY_UART
 endif
 
 ifeq ($(with-login), yes)

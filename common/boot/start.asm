@@ -88,10 +88,14 @@ _init:
 	mov esp, temporary_stack - 8
 	mov ebp, esp
 
-	; call _enable_uart
+%ifdef EARLY_UART
+	call _enable_uart
+%endif
 
-	; mov esi, str_multiboot_info
-	; call _uart_dbg
+%ifdef EARLY_UART
+	mov esi, str_multiboot_info
+	call _uart_dbg
+%endif
 
 	; Store the multiboot info structure pointed by EBX (avoid accidental erasing)
 	mov edi, multiboot_infos
@@ -100,8 +104,10 @@ _init:
 	cld
 	rep movsb
 
-	; mov esi, str_gdt_renew
-	; call _uart_dbg
+%ifdef EARLY_UART
+	mov esi, str_gdt_renew
+	call _uart_dbg
+%endif
 
 	; Set up a early GDT
 	; reserve 8 bytes for structure pointer (need six bytes)
@@ -130,16 +136,20 @@ _init:
 	jmp 0x8: .set_protected_cs
 .set_protected_cs:
 
-	; mov esi, str_tss_load
-	; call _uart_dbg
+%ifdef EARLY_UART
+	mov esi, str_tss_load
+	call _uart_dbg
+%endif
 
 	; load the TSS segment
 	; Will be used when will switch to ring 0 from ring 3
 	mov ax, 0x38
 	ltr ax
 
-	; mov esi, str_idt_build
-	; call _uart_dbg
+%ifdef EARLY_UART
+	mov esi, str_idt_build
+	call _uart_dbg
+%endif
 
 	; Set up a early IDT
 	; reserve 8 bytes for structure pointer (need six bytes)
@@ -153,45 +163,58 @@ _init:
 
 	add esp, 8 + 4
 
-	; mov esi, str_init_watchdog
-	; call _uart_dbg
+%ifdef EARLY_UART
+	mov esi, str_init_watchdog
+	call _uart_dbg
+%endif
 
 	; set watchdog
 	call alt_guard_all
 
-	; mov esi, str_disable_cursor
-	; call _uart_dbg
+%ifdef EARLY_UART
+	mov esi, str_disable_cursor
+	call _uart_dbg
+%endif
 	call alt_disable_cursor
 
-	; mov esi, str_clear_screen
-	; call _uart_dbg
+%ifdef EARLY_UART
+	mov esi, str_clear_screen
+	call _uart_dbg
+%endif
 	call alt_clear_screen
 
 	; Do ACPI tests
 	; call alt_acpi
 
 	; Get device map in memory and push a pointer to a generated structure
-	; mov esi, str_device_map
-	; call _uart_dbg
+%ifdef EARLY_UART
+	mov esi, str_device_map
+	call _uart_dbg
+%endif
 	call alt_get_device_mem_map
 	push eax
 
 	; Set up the MMU, prepare switching to high half memory
-	; mov esi, str_init_paging
-	; call _uart_dbg
+%ifdef EARLY_UART
+	mov esi, str_init_paging
+	call _uart_dbg
+%endif
 	call alt_init_paging
 
 	; Push the grub multiboot header
 	push multiboot_infos
 
 	; Call _init_kernel located in high memory !
-	; mov esi, str_jump_high_mem
-	; call _uart_dbg
+%ifdef EARLY_UART
+	mov esi, str_jump_high_mem
+	call _uart_dbg
+%endif
 	call _init_kernel
 
 	; A long jump can give a adrenaline boost, i dont understand why ...
 	; call 0x8:_init_kernel
 
+%ifdef EARLY_UART
 _enable_uart:
 	push ebp
 	mov ebp, esp
@@ -277,6 +300,7 @@ str_clear_screen: db "Clear screen", 10, 0
 str_device_map: db "Memory device mapping", 10, 0
 str_init_paging: db "Initialization of paging", 10, 0
 str_jump_high_mem: db "jump to high memory", 10, 0
+%endif
 
 align 16
 ; 4ko for a temporary stack
