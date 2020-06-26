@@ -10,6 +10,8 @@ use alloc::vec;
 use alloc::vec::Vec;
 use ansi_escape_code::AnsiColor;
 
+use core::fmt;
+
 #[derive(Clone)]
 pub struct VbeMode {
     /// linear frame buffer address
@@ -40,8 +42,14 @@ pub struct VbeMode {
     crtc_info: Option<CrtcInfo>,
 }
 
-use core::fmt;
-
+/// The print syntax is:
+/// linear frame buffer virt location: {:#?}
+/// db_frame_buffer virt location: {:#?}
+/// graphic buffer virt location: {:#?}
+/// display: {} * {} * {} of pitch {}
+/// char px: {} * {}, colums: {}, lines: {}
+/// mode_info: {:#?}
+/// crtc_info: {:#?}
 impl fmt::Debug for VbeMode {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(
