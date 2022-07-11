@@ -51,6 +51,9 @@ Or an archlinux system
 ### On modern Debiam machine, you need an older version of automake
 `sudo apt-get install automake-1.15`
 
+## Install cland and the tool to bind the C libc on Rust
+`sudo apt-get install clang`
+
 # CAUTION: NEVER BE A SUDOER NOR A ROOT FOR THE RUST INSTALLATION !
 
 Now, it's the time to install Rust, The main code of the kernel is in this langage, so you have to follow this procedure to install it. The curl program and a internet connexion are required to launch the installation. The total installation of rust takes approximately 1 GB of disk space so maybe you have to delete some porn videos to free disk space.
@@ -90,9 +93,6 @@ Then, to recompile *libcore*, you need rust sources
 Sorry, buy you have to give root rights, because it will create a turbofish toolchain directory in your system root  
 First, ensure you got automake version 1.15. On Debian 10, you could simply write `sudo apt-get install automake-1.15`  
 `./install_toolchain_turbofish.sh`
-
-## Install cland and the tool to bind the C libc on Rust
-`sudo apt-get install clang` 
 
 ## Build the entire OS  
 `make && make unix`
