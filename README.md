@@ -31,8 +31,9 @@ Or an archlinux system
 ### For linking, the *ld* program must be installed on your computer, you need also *make* to build project   
 `sudo apt-get install binutils make`
 
-### the *grub* program should be installed in order to create a disk image with kernel
+### BE CAREFULL ! the *grub* program should be installed in order to create a disk image with kernel.
 `sudo apt-get install grub`
+or `sudo apt-get install grub-pc-bin` for i386/mbr arch if you are with a EFI grub
 
 ### install rsync for os disk creation
 `sudo apt-get install rsync`
@@ -46,6 +47,9 @@ If you are on a debian system
 
 Or an archlinux system   
 `sudo pacman -S gcc`
+
+### On modern Debiam machine, you need an older version of automake
+`sudo apt-get install automake-1.15`
 
 # CAUTION: NEVER BE A SUDOER NOR A ROOT FOR THE RUST INSTALLATION !
 
@@ -89,7 +93,6 @@ First, ensure you got automake version 1.15. On Debian 10, you could simply writ
 
 ## Install cland and the tool to bind the C libc on Rust
 `sudo apt-get install clang` 
-`cargo install bindgen`
 
 ## Build the entire OS  
 `make && make unix`
@@ -97,5 +100,4 @@ First, ensure you got automake version 1.15. On Debian 10, you could simply writ
 ## Now, it is the time to launch the OS on your computer
 
 ### If you want to execute, you need *qemu* (virtual machine system) with kvm then launch the disk image
-
 `make exec`
