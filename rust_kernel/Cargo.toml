@@ -19,7 +19,6 @@ crate-type = ["staticlib"]
 [dependencies]
 bit_field = "0.10.0"
 bitflags = "1.0.4"
-log = "0.4.6"
 lock_api = "0.1.5"
 derive_is_enum_variant = "0.1.1"
 try_clone_derive = "0.1.1"
@@ -41,6 +40,9 @@ time = { path = "dependencies/time" }
 ansi_escape_code = { path = "dependencies/ansi_escape_code" }
 rtc_toolkit = { path = "dependencies/rtc_toolkit" }
 screen = { path = "dependencies/screen" }
+
+[dependencies.log]
+version = "0.4.17"
 
 [dependencies.fallible_collections]
 version = "0.1.3"

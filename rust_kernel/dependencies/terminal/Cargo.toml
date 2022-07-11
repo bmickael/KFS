@@ -8,12 +8,14 @@ edition = "2018"
 keyboard = { path = "../keyboard" }
 io = { path = "../io" }
 bitflags = "1.0.4"
-log = "0.4.6"
 messaging = { path = "../messaging" }
 libc_binding = { path = "../libc_binding" }
 ansi_escape_code = { path = "../ansi_escape_code" }
 screen = { path = "../screen" }
 sync = { path = "../sync" }
+
+[dependencies.log]
+version = "0.4.17"
 
 [dependencies.arrayvec]
 version = "0.5.1"

@@ -9,8 +9,10 @@ documentation = "cargo doc --open"
 homepage = "index.html"
 
 [dependencies]
-log = "0.4.6"
 messaging = { path = "../messaging" }
 irq = { path = "../irq" }
 time = { path = "../time" }
 libc_binding = { path = "../libc_binding" }
+
+[dependencies.log]
+version = "0.4.17"
