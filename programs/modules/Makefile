@@ -23,7 +23,7 @@ all: .rust-toolchain .xbuild-toolchain build_rust
 	echo "Updated" > .rust-toolchain
 
 .xbuild-toolchain: xbuild-toolchain
-	cargo install --version $(CARGO_XBUILD_VERSION) cargo-xbuild --force
+	cargo install --version $(CARGO_XBUILD_VERSION) cargo-xbuild --force --locked
 	echo "Updated" > .xbuild-toolchain
 
 build_rust:

@@ -148,7 +148,7 @@ all: .rust-toolchain .xbuild-toolchain compile_bootstrap build_rust build_libasm
 	echo "Updated" > .rust-toolchain
 
 .xbuild-toolchain: xbuild-toolchain
-	cargo install --version $(CARGO_XBUILD_VERSION) cargo-xbuild --force
+	cargo install --version $(CARGO_XBUILD_VERSION) cargo-xbuild --force --locked
 	echo "Updated" > .xbuild-toolchain
 
 common_clean:
