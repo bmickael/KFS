@@ -1,6 +1,5 @@
 //! Kernel tty manager
 #![cfg_attr(all(not(test), not(feature = "std-print")), no_std)]
-#![feature(const_fn)]
 
 extern crate alloc;
 

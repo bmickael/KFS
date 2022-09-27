@@ -13,7 +13,12 @@ fn get_cpu_time() -> u64 {
     let mut edx: u32;
 
     unsafe {
-        llvm_asm!("rdtsc" : "={eax}"(eax), "={edx}"(edx));
+        asm!(
+            "rdtsc",
+            out("eax") eax,
+            out("edx") edx,
+            options(nostack)
+        );
     }
     ((edx as u64) << 32) + eax as u64
 }

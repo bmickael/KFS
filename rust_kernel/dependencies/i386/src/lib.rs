@@ -1,9 +1,9 @@
 #![cfg_attr(not(test), no_std)]
 #![feature(stdsimd)]
-#![feature(llvm_asm)]
 
 use bit_field::BitField;
 
+use core::arch::asm;
 use core::fmt;
 use core::fmt::Display;
 
@@ -100,9 +100,8 @@ impl Eflags {
         let inner: u32;
 
         unsafe {
-            llvm_asm!("pushfd
-                       pop eax"
-                      : "={eax}" (inner) : : : "intel", "volatile")
+            asm!("pushfd",
+                 "pop eax", out("eax") inner);
         };
         Eflags { inner }
     }

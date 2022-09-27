@@ -1,5 +1,6 @@
 //! See [Port_IO](https://wiki.osdev.org/Port_IO)
 use super::Io;
+use core::arch::asm;
 use core::marker::PhantomData;
 
 /// This waits one IO cycle.
@@ -9,7 +10,7 @@ use core::marker::PhantomData;
 #[inline(always)]
 pub extern "C" fn io_wait() {
     unsafe {
-        llvm_asm!("out %al, %dx" :: "{al}"(0x42), "{dx}"(0x80));
+        asm!("out dx, al", in("dx") 0x80, in("al") 0x42_u8);
     }
 }
 
@@ -37,14 +38,14 @@ impl Io for Pio<u8> {
     fn read(&self) -> Self::Value {
         let result: Self::Value;
         unsafe {
-            llvm_asm!("in %dx, %al" : "={al}"(result) : "{dx}"(self.port));
+            asm!("in al, dx", in("dx") self.port, out("al") result);
         }
         result
     }
 
     fn write(&mut self, value: Self::Value) {
         unsafe {
-            llvm_asm!("out %al, %dx" :: "{al}"(value), "{dx}"(self.port));
+            asm!("out dx, al", in("dx") self.port, in("al") value);
         }
     }
 }
@@ -55,14 +56,14 @@ impl Io for Pio<u16> {
     fn read(&self) -> Self::Value {
         let result: Self::Value;
         unsafe {
-            llvm_asm!("in %dx, %ax" : "={ax}"(result) : "{dx}"(self.port));
+            asm!("in ax, dx", in("dx") self.port, out("ax") result);
         }
         result
     }
 
     fn write(&mut self, value: Self::Value) {
         unsafe {
-            llvm_asm!("out %ax, %dx" :: "{ax}"(value), "{dx}"(self.port));
+            asm!("out dx, ax", in("dx") self.port, in("ax") value);
         }
     }
 }
@@ -73,14 +74,14 @@ impl Io for Pio<u32> {
     fn read(&self) -> Self::Value {
         let result: Self::Value;
         unsafe {
-            llvm_asm!("in %dx, %eax" : "={eax}"(result) : "{dx}"(self.port));
+            asm!("in eax, dx", in("dx") self.port, out("eax") result);
         }
         result
     }
 
     fn write(&mut self, value: Self::Value) {
         unsafe {
-            llvm_asm!("out %eax, %dx" :: "{eax}"(value), "{dx}"(self.port));
+            asm!("out dx, eax", in("dx") self.port, in("eax") value);
         }
     }
 }

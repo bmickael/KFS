@@ -2,6 +2,7 @@
 //! and [Interrupts](https://wiki.osdev.org/Interrupts)
 
 use bit_field::BitField;
+use core::arch::asm;
 use core::ffi::c_void;
 use core::ops::{Deref, DerefMut, Index, IndexMut};
 use core::slice::SliceIndex;
@@ -216,8 +217,11 @@ impl Idtr {
             length: 0,
             idt_addr: 1 as *mut _,
         };
-
-        llvm_asm!("sidt $0" : "=*m"(&mut idtr as *mut _) :: "memory" : "volatile");
+        asm!(
+            "sidt [{}]",
+            in(reg) &mut idtr as *mut _,
+            options()
+        );
         idtr
     }
 
@@ -225,7 +229,11 @@ impl Idtr {
     #[no_mangle]
     #[inline(never)]
     unsafe extern "C" fn load_idtr(&self) {
-        llvm_asm!("lidt ($0)" :: "r" (self as *const _) : "memory" : "volatile");
+        asm!(
+            "lidt [{}]",
+            in(reg) self as *const _,
+            options()
+        );
     }
 
     /// Loads the Idtr structure in the actual register IDTR.

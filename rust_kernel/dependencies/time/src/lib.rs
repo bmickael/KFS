@@ -103,7 +103,8 @@ impl Display for Date {
             f,
             // "{} {:?} {} {}h{:>02}:{:>02}s",
             // self.day_of_month, self.month, self.year, self.hours, self.minutes, self.sec
-            "{}h{:>02}:{:>02}s", self.hours, self.minutes, self.sec
+            "{}h{:>02}:{:>02}s",
+            self.hours, self.minutes, self.sec
         )
     }
 }

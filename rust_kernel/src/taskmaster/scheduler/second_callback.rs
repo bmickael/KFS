@@ -22,7 +22,7 @@ fn second_callback() {
 pub unsafe extern "C" fn second_callback_handler() {
     loop {
         while SECOND_CALLBACK_TRIGGER.compare_and_swap(true, false, Ordering::Relaxed) == false {
-            llvm_asm!("hlt");
+            asm!("hlt");
         }
         // Check if we are really on a unpreemptible state
         assert_eq!(_get_preemptible_state(), 1);

@@ -1,8 +1,8 @@
 //! See [PS/2 Keyboard](https://wiki.osdev.org/Keyboard)
 #![cfg_attr(not(test), no_std)]
 #![deny(missing_docs)]
-#![feature(llvm_asm)]
 
+use core::arch::asm;
 use io::{Io, Pio};
 
 /// this module contains all the keySymbols for multiple layouts
@@ -66,7 +66,7 @@ impl Ps2Controler {
         }
         self.command.write(0xfe);
         unsafe {
-            llvm_asm!("hlt");
+            asm!("hlt");
         }
     }
 }

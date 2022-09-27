@@ -63,6 +63,7 @@ impl<'a, T> Lock<T> {
     fn try_lock(&'a self) -> Option<LockGuard<'a, T>> {
         if self.raw_lock.try_lock() {
             Some(LockGuard(unsafe {
+                #[allow(cast_ref_to_mut)]
                 &mut *(self as *const Self as *mut Self)
             }))
         } else {

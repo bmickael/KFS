@@ -1,6 +1,5 @@
 //! This crate provide a kernel module toolkit
 #![cfg_attr(not(test), no_std)]
-#![feature(const_fn)]
 // The Writer give print! && println! macros for modules
 #![macro_use]
 pub mod writer;

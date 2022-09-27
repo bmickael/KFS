@@ -1,15 +1,13 @@
 #![cfg_attr(not(test), no_std)]
 #![cfg_attr(test, allow(unused_imports))]
-#![feature(llvm_asm)]
 #![feature(stmt_expr_attributes)]
 #![feature(slice_index_methods)]
 #![cfg_attr(test, feature(allocator_api))]
 #![feature(alloc_error_handler)]
-#![feature(try_reserve)]
-#![feature(vec_remove_item)]
-#![feature(const_fn)]
 #![feature(drain_filter)]
 #![feature(core_intrinsics)]
+
+#![allow(unstable_name_collisions)] // for FallibleCollection try_new methods
 
 #[macro_use]
 extern crate fallible_collections;

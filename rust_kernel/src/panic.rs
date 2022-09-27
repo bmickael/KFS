@@ -147,7 +147,11 @@ pub fn panic_sa_mere(info: &PanicInfo) {
     );
     let ebp: *const u32;
     unsafe {
-        llvm_asm!("mov eax, ebp" : "={eax}"(ebp) : : : "intel");
+        asm!(
+            "mov eax, ebp",
+            out("eax") ebp,
+            options(nostack)
+        );
         trace_back((*ebp.add(1), *ebp as *const u32));
     };
 }

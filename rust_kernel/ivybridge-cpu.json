@@ -7,7 +7,6 @@
   "executables": true,
   "has-elf-tls": true,
   "has-rpath": true,
-  "is-builtin": true,
   "linker-flavor": "gcc",
   "linker-is-gnu": true,
   "llvm-target": "i686-unknown-linux-gnu",
@@ -22,7 +21,6 @@
     ]
   },
   "relro-level": "full",
-  "stack-probes": true,
   "target-c-int-width": "32",
   "target-endian": "little",
   "target-family": "unix",

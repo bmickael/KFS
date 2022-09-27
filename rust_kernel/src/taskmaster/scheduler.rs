@@ -246,7 +246,7 @@ impl Scheduler {
             pid,
             ThreadGroup::try_new(
                 father_pid,
-                Thread::new(ProcessState::Running(process))?,
+                Thread::new(ProcessState::Running(Some(process)))?,
                 pid,
             )?,
         )?;

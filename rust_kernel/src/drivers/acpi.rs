@@ -427,7 +427,7 @@ impl Acpi {
                         .write(((s5_obj.slp_typ_b_num as u16) << SLEEP_STATE_MAGIC_SHL) | SLP_EN);
                 }
                 // wait for shutdown in iddle mode
-                llvm_asm!("hlt");
+                asm!("hlt");
             }
         });
         // _S5_ instructions OR s5_obj.package_op not found !

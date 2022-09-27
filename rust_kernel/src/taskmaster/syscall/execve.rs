@@ -203,7 +203,7 @@ pub fn sys_execve(
         /*
          * Now, we can drop safety the old process
          */
-        scheduler.current_thread_mut().process_state = ProcessState::Running(new_process);
+        scheduler.current_thread_mut().process_state = ProcessState::Running(Some(new_process));
 
         // Reset the signal interface
         scheduler

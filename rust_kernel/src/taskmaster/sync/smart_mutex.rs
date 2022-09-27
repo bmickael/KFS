@@ -57,9 +57,12 @@ impl RawSmartMutex {
     /// Try to lock the mutex
     fn try_lock(&self) -> bool {
         let mut current_ebp: u32;
-
         unsafe {
-            llvm_asm!("mov %ebp, %eax" : "={eax}"(current_ebp):);
+            asm!(
+                "mov eax, ebp",
+                out("eax") current_ebp,
+                options(nostack)
+            );
             // Get the ancestor EBP value
             // NOTE: In case of inlined code. this raw deferencing may causes a page fault
             current_ebp = *(current_ebp as *const u32) as _;
@@ -124,6 +127,7 @@ impl<'a, T: Debug> SmartMutex<T> {
         if !self.raw_lock.try_lock() {
             panic!("Dead lock {:?}", self.data);
         }
+        #[allow(cast_ref_to_mut)]
         SmartMutexGuard(unsafe { &mut *(self as *const Self as *mut Self) })
     }
     pub fn force_unlock(&'a self) {

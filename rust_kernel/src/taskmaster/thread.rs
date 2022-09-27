@@ -14,8 +14,6 @@ use fallible_collections::FallibleBox;
 use alloc::boxed::Box;
 use alloc::collections::TryReserveError;
 
-use core::mem;
-
 #[derive(Debug, Copy, Clone)]
 pub enum AutoPreemptReturnValue {
     None,
@@ -67,8 +65,8 @@ impl Thread {
         Ok(Self {
             signal: self.signal.fork(),
             process_state: match &self.process_state {
-                ProcessState::Running(p) => {
-                    ProcessState::Running(p.sys_clone(kernel_esp, child_stack, flags)?)
+                ProcessState::Running(Some(p)) => {
+                    ProcessState::Running(Some(p.sys_clone(kernel_esp, child_stack, flags)?))
                 }
                 _ => panic!("Non running process should not clone"),
             },
@@ -78,13 +76,15 @@ impl Thread {
 
     pub fn unwrap_process_mut(&mut self) -> &mut UserProcess {
         match &mut self.process_state {
-            ProcessState::Waiting(process, _) | ProcessState::Running(process) => process,
+            ProcessState::Waiting(Some(process), _) | ProcessState::Running(Some(process)) => process,
+            _ => panic!("unwrap_process_mut failed!")
         }
     }
 
     pub fn unwrap_process(&self) -> &UserProcess {
         match &self.process_state {
-            ProcessState::Running(process) | ProcessState::Waiting(process, _) => process,
+            ProcessState::Running(Some(process)) | ProcessState::Waiting(Some(process), _) => process,
+            _ => panic!("unwrap_process failed!")
         }
     }
 
@@ -126,19 +126,11 @@ impl Thread {
     }
 
     pub fn set_waiting(&mut self, waiting_state: WaitingState) {
-        let uninit = unsafe { mem::uninitialized() };
-        let prev = mem::replace(&mut self.process_state, uninit);
-        let next = prev.set_waiting(waiting_state);
-        let uninit = mem::replace(&mut self.process_state, next);
-        mem::forget(uninit);
+        self.process_state.set_waiting(waiting_state);
     }
 
     pub fn set_running(&mut self) {
-        let uninit = unsafe { mem::uninitialized() };
-        let prev = mem::replace(&mut self.process_state, uninit);
-        let next = prev.set_running();
-        let uninit = mem::replace(&mut self.process_state, next);
-        mem::forget(uninit);
+        self.process_state.set_running();
     }
 }
 
@@ -169,22 +161,25 @@ pub enum WaitingState {
 #[derive(Debug)]
 pub enum ProcessState {
     /// The process is currently on running state
-    Running(Box<UserProcess>),
+    Running(Option<Box<UserProcess>>),
     /// The process is currently waiting for something
-    Waiting(Box<UserProcess>, WaitingState),
+    Waiting(Option<Box<UserProcess>>, WaitingState),
 }
 
 impl ProcessState {
-    pub fn set_waiting(self, waiting_state: WaitingState) -> Self {
-        match self {
-            ProcessState::Running(p) => ProcessState::Waiting(p, waiting_state),
-            ProcessState::Waiting(p, _) => ProcessState::Waiting(p, waiting_state),
-        }
+    pub fn set_waiting(&mut self, waiting_state: WaitingState) {
+        let p = match self {
+            ProcessState::Running(p) | ProcessState::Waiting(p, _) => p.take(),
+        };
+        p.as_ref().expect("Option<Box<T>> cannot be None.");
+        *self = ProcessState::Waiting(p, waiting_state);
     }
-    pub fn set_running(self) -> Self {
-        match self {
-            ProcessState::Waiting(p, _) => ProcessState::Running(p),
+    pub fn set_running(&mut self) {
+        let p = match self {
+            ProcessState::Waiting(p, _) => p.take(),  //ProcessState::Running(p),
             _ => panic!("already running"),
-        }
+        };
+        p.as_ref().expect("Option<Box<T>> cannot be None.");
+        *self = ProcessState::Running(p);
     }
 }

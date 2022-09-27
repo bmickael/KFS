@@ -1,6 +1,5 @@
 //! This crate provide a small brief about IRQ
 #![cfg_attr(not(test), no_std)]
-#![feature(llvm_asm)]
 #![feature(slice_index_methods)]
 
 #[macro_use]
@@ -10,17 +9,18 @@ pub mod idt;
 use i386::Eflags;
 
 pub use self::idt::{GateType, IdtGateEntry, Idtr, InterruptTable};
+use core::arch::asm;
 
 /// Enables interrupts system-wide
 #[inline(always)]
 pub unsafe fn enable() {
-    llvm_asm!("sti" :::: "volatile");
+    asm!("sti");
 }
 
 /// Disable interrupts system-wide
 #[inline(always)]
 pub unsafe fn disable() {
-    llvm_asm!("cli" :::: "volatile");
+    asm!("cli");
 }
 
 /// Get the current interrupts state

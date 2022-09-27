@@ -8,7 +8,7 @@ edition = "2018"
 bitflags = "1.0.4"
 bit_field = "0.9.0"
 terminal = { path = "../terminal" }
-fallible_collections = "0.1.3"
+fallible_collections = "0.4.8"
 libc_binding = { path = "../libc_binding" }
 
 [dev-dependencies]

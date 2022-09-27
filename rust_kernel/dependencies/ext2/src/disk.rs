@@ -1,6 +1,6 @@
 use crate::tools::IoResult;
 use core::fmt::Debug;
-use core::mem::size_of;
+use core::mem::{size_of, MaybeUninit};
 use libc_binding::Errno;
 extern crate alloc;
 use alloc::boxed::Box;
@@ -56,16 +56,18 @@ impl Disk {
 
     /// Read a particulary struct in file object
     pub fn read_struct<T: Copy>(&mut self, offset: u64) -> IoResult<T> {
-        let t: T;
-        unsafe {
-            t = core::mem::uninitialized();
-            let count = self.0.read_buffer(
-                offset,
-                core::slice::from_raw_parts_mut(&t as *const T as *mut u8, size_of::<T>()),
-            )?;
-            if count as usize != size_of::<T>() {
-                return Err(Errno::EIO);
+        let t = MaybeUninit::<T>::uninit();
+        let count = self.0.read_buffer(
+            offset,
+            unsafe {
+                core::slice::from_raw_parts_mut(t.as_ptr() as *mut u8, size_of::<T>())
             }
+        )?;
+        let t = unsafe {
+            t.assume_init()
+        };
+        if count as usize != size_of::<T>() {
+            return Err(Errno::EIO);
         }
         Ok(t)
     }

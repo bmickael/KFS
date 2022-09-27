@@ -17,7 +17,12 @@ fn times(buf: Option<&mut tms>) -> SysResult<u32> {
     let mut clocks = 42;
 
     unsafe {
-        llvm_asm!("rdtsc\nmov eax, $0" : "=*m"(&mut clocks as *mut _):: "memory" : "intel", "volatile");
+        asm!(
+            "rdtsc",
+            "mov {clocks:e}, eax",
+            clocks = inout(reg) clocks,
+            options(nostack)
+        );
     }
     Ok(clocks)
 }

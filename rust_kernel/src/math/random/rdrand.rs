@@ -2,13 +2,16 @@
 
 /// rdrand set the carry flag to 1 if the random is well done, else loop while it works
 pub fn rdrand() -> u32 {
-    let result: u32;
+    let mut result: u32 = 0;
 
     unsafe {
-        llvm_asm!("
-            1:
-            rdrand %eax
-            jnc 1b" : "={eax}"(result) :::);
+        asm!(
+            "2:
+            rdrand eax
+            jnc 2b",
+            out("eax") result,
+            options(),
+        );
     }
     result
 }

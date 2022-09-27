@@ -1,6 +1,5 @@
 //! This module provide methods to read and write on I/O ports
 #![cfg_attr(not(test), no_std)]
-#![feature(llvm_asm)]
 #![deny(missing_docs)]
 
 use core::cmp::PartialEq;
