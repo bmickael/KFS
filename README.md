@@ -56,7 +56,7 @@ Or an archlinux system
 
 # CAUTION: NEVER BE A SUDOER NOR A ROOT FOR THE RUST INSTALLATION !
 
-Now, it's the time to install Rust, The main code of the kernel is in this langage, so you have to follow this procedure to install it. The curl program and a internet connexion are required to launch the installation. The total installation of rust takes approximately 1 GB of disk space so maybe you have to delete some porn videos to free disk space.
+Now, it's the time to install Rust, The main code of the kernel is in this langage, so you have to follow this procedure to install it. The curl program and a internet connexion are required to launch the installation. The total installation of rust takes approximately 1 GB of disk space.
 
 ## If you dont have rust on your computer
 First, launch the main install procedure: https://www.rust-lang.org/tools/install  
