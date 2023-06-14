@@ -60,7 +60,7 @@ system_root:
 	sudo chmod 0700 $(SYSTEM_ROOT)/root
 
 $(IMG_DISK):
-	dd if=/dev/zero of=$(IMG_DISK) bs=1024 count=$(IMAGE_SIZE)
+	sudo dd if=/dev/zero of=$(IMG_DISK) bs=1024 count=$(IMAGE_SIZE)
 	echo -e "o\nn\np\n1\n2048\n$(FIRST_PART_SIZE)\na\nw\n" | sudo fdisk $(IMG_DISK)
 	echo -e "n\np\n2\n\n\nw\n" | sudo fdisk $(IMG_DISK)
 	sudo losetup -fP $(IMG_DISK)
