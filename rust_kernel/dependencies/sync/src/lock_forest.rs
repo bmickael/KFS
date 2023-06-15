@@ -11,7 +11,10 @@ pub struct RawLock(AtomicBool);
 impl RawLock {
     fn try_lock(&self) -> bool {
         let current = false;
-        match self.0.compare_exchange(current, true, Ordering::SeqCst, Ordering::SeqCst) {
+        match self
+            .0
+            .compare_exchange(current, true, Ordering::SeqCst, Ordering::SeqCst)
+        {
             Ok(_) => true,
             Err(_) => false,
         }

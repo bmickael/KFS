@@ -112,10 +112,14 @@ pub unsafe extern "C" fn unmap(virt_addr: *mut u8, size: usize) -> i32 {
 pub extern "C" fn get_physical_addr(addr: Virt) -> *mut u8 {
     unsafe {
         match &mut KERNEL_ALLOCATOR {
-            KernelAllocator::Kernel => KERNEL_VIRTUAL_PAGE_ALLOCATOR
-                .as_mut()
-                .unwrap()
-                .get_physical_addr(addr).unwrap_or(Phys(0)).0 as *mut u8,
+            KernelAllocator::Kernel => {
+                KERNEL_VIRTUAL_PAGE_ALLOCATOR
+                    .as_mut()
+                    .unwrap()
+                    .get_physical_addr(addr)
+                    .unwrap_or(Phys(0))
+                    .0 as *mut u8
+            }
             KernelAllocator::Bootstrap(_) => {
                 panic!("call to get_physical_addr while in bootstrap allocator ")
             }

@@ -18,7 +18,6 @@ macro_rules! symbol_addr {
 }
 pub struct Cr0;
 
-
 extern "C" {
     /// reg is the input parameter and the output
     fn _int8086(reg: *mut BaseRegisters, bios_int: u16) -> u16;

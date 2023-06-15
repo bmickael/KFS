@@ -57,15 +57,10 @@ impl Disk {
     /// Read a particulary struct in file object
     pub fn read_struct<T: Copy>(&mut self, offset: u64) -> IoResult<T> {
         let t = MaybeUninit::<T>::uninit();
-        let count = self.0.read_buffer(
-            offset,
-            unsafe {
-                core::slice::from_raw_parts_mut(t.as_ptr() as *mut u8, size_of::<T>())
-            }
-        )?;
-        let t = unsafe {
-            t.assume_init()
-        };
+        let count = self.0.read_buffer(offset, unsafe {
+            core::slice::from_raw_parts_mut(t.as_ptr() as *mut u8, size_of::<T>())
+        })?;
+        let t = unsafe { t.assume_init() };
         if count as usize != size_of::<T>() {
             return Err(Errno::EIO);
         }

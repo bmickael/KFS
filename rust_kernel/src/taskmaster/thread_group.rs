@@ -300,7 +300,9 @@ impl ThreadGroup {
     /// remove pid `pid` from the child list, Panic if not present
     pub fn remove_child(&mut self, pid: Pid) {
         let len = self.unwrap_running().child.len();
-        self.unwrap_running_mut().child.retain(|inner_pid| *inner_pid != pid);
+        self.unwrap_running_mut()
+            .child
+            .retain(|inner_pid| *inner_pid != pid);
         if len == 0 || self.unwrap_running().child.len() != len - 1 {
             panic!("can't remove child pid it is not present");
         }

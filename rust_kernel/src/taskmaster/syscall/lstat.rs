@@ -33,7 +33,7 @@ pub fn sys_lstat(filename: *const c_char, buf: *mut stat) -> SysResult<u32> {
             Ok(stat) => {
                 *safe_buf = stat;
                 Ok(0)
-            },
+            }
             Err(value) => Err(value),
         }
     })

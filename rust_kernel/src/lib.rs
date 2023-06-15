@@ -6,7 +6,6 @@
 #![feature(alloc_error_handler)]
 #![feature(drain_filter)]
 #![feature(core_intrinsics)]
-
 #![allow(unstable_name_collisions)] // for FallibleCollection try_new methods
 
 #[macro_use]

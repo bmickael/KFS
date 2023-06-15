@@ -27,8 +27,8 @@ pub fn sys_fstat(fd: Fd, buf: *mut stat) -> SysResult<u32> {
             Ok(ret_stat) => {
                 *safe_buf = ret_stat;
                 Ok(0)
-            },
-            Err(e) => Err(e)
+            }
+            Err(e) => Err(e),
         }
     })
 }

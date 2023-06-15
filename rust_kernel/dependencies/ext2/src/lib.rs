@@ -2,7 +2,6 @@
 //! see [osdev](https://wiki.osdev.org/Ext2)
 #![feature(maybe_uninit_uninit_array)]
 #![feature(maybe_uninit_array_assume_init)]
-
 #![cfg_attr(all(not(test), not(feature = "std-print")), no_std)]
 
 mod disk;
@@ -161,7 +160,10 @@ impl Ext2Filesystem {
             inode_nbr = entry.0.get_inode();
             last_entry = Some(entry);
         }
-        Ok((parent_inode_nbr, last_entry.expect("Must be altmost Some()")))
+        Ok((
+            parent_inode_nbr,
+            last_entry.expect("Must be altmost Some()"),
+        ))
     }
 
     pub fn find_entry_in_inode(
@@ -922,7 +924,9 @@ impl<K: Eq + PartialEq + Copy, T: Clone + Default> Cache<K, T> {
         for entry in entries.iter_mut() {
             entry.write(CacheEntry::new(nb_elems));
         }
-        Self { entries : unsafe { MaybeUninit::array_assume_init(entries) } }
+        Self {
+            entries: unsafe { MaybeUninit::array_assume_init(entries) },
+        }
     }
 
     /// Invalidate all the layers()

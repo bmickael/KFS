@@ -1429,12 +1429,7 @@ impl VirtualFileSystem {
         Ok(())
     }
 
-    pub fn stat(
-        &mut self,
-        cwd: &Path,
-        creds: &Credentials,
-        path: Path,
-    ) -> SysResult<stat> {
+    pub fn stat(&mut self, cwd: &Path, creds: &Credentials, path: Path) -> SysResult<stat> {
         let entry_id = self.pathname_resolution(cwd, creds, &path)?;
         let entry = self.dcache.get_entry(&entry_id)?;
         let inode_id = entry.inode_id;
@@ -1442,12 +1437,7 @@ impl VirtualFileSystem {
         inode.stat()
     }
 
-    pub fn lstat(
-        &mut self,
-        cwd: &Path,
-        creds: &Credentials,
-        path: Path,
-    ) -> SysResult<stat> {
+    pub fn lstat(&mut self, cwd: &Path, creds: &Credentials, path: Path) -> SysResult<stat> {
         let entry_id = self.pathname_resolution_no_follow_last_symlink(cwd, creds, &path)?;
         let entry = self.dcache.get_entry(&entry_id)?;
         let inode_id = entry.inode_id;

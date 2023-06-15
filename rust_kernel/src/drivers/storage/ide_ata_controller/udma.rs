@@ -231,8 +231,7 @@ impl Udma {
 /// Set a unique PRDT
 fn init_prdt(prdt: &mut Prdt, memory_zone: &mut Vec<Vec<u8>>) {
     for (mem, prd) in memory_zone.iter().zip(prdt.0.iter_mut()) {
-        let addr =
-            get_physical_addr(Virt(mem.as_ptr() as usize));
+        let addr = get_physical_addr(Virt(mem.as_ptr() as usize));
         if addr == core::ptr::null_mut() {
             panic!("Buddy Allocator is bullshit");
         }

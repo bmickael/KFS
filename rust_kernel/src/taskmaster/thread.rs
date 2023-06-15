@@ -76,15 +76,19 @@ impl Thread {
 
     pub fn unwrap_process_mut(&mut self) -> &mut UserProcess {
         match &mut self.process_state {
-            ProcessState::Waiting(Some(process), _) | ProcessState::Running(Some(process)) => process,
-            _ => panic!("unwrap_process_mut failed!")
+            ProcessState::Waiting(Some(process), _) | ProcessState::Running(Some(process)) => {
+                process
+            }
+            _ => panic!("unwrap_process_mut failed!"),
         }
     }
 
     pub fn unwrap_process(&self) -> &UserProcess {
         match &self.process_state {
-            ProcessState::Running(Some(process)) | ProcessState::Waiting(Some(process), _) => process,
-            _ => panic!("unwrap_process failed!")
+            ProcessState::Running(Some(process)) | ProcessState::Waiting(Some(process), _) => {
+                process
+            }
+            _ => panic!("unwrap_process failed!"),
         }
     }
 
@@ -176,7 +180,7 @@ impl ProcessState {
     }
     pub fn set_running(&mut self) {
         let p = match self {
-            ProcessState::Waiting(p, _) => p.take(),  //ProcessState::Running(p),
+            ProcessState::Waiting(p, _) => p.take(), //ProcessState::Running(p),
             _ => panic!("already running"),
         };
         p.as_ref().expect("Option<Box<T>> cannot be None.");

@@ -1,7 +1,6 @@
 //! This crate provide methods to read Master Boot record
 #![feature(maybe_uninit_uninit_array)]
 #![feature(maybe_uninit_array_assume_init)]
-
 #![cfg_attr(not(test), no_std)]
 
 use core::mem::{self, MaybeUninit};
