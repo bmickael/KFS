@@ -96,11 +96,12 @@ pub enum ModConfig {
 }
 
 /// Initialize basics tools of the module
-pub unsafe fn init_config(symtab_list: &SymbolList, global_alloc: &mut RustGlobalAlloc) {
+
+pub unsafe fn init_config(symtab_list: &SymbolList, _global_alloc: &mut RustGlobalAlloc) {
     WRITER.set_write_callback(symtab_list.write);
     EMERGENCY_WRITER.set_write_callback(symtab_list.emergency_write);
     #[cfg(not(test))]
-    global_alloc.set_methods(symtab_list.alloc_tools);
+    _global_alloc.set_methods(symtab_list.alloc_tools);
 }
 
 /// Configuration parameters of the RTC module

@@ -3,6 +3,7 @@
 
 use bit_field::BitField;
 
+#[cfg(not(test))]
 use core::arch::asm;
 use core::fmt;
 use core::fmt::Display;

@@ -5,8 +5,6 @@ use crate::taskmaster::global_time::GLOBAL_TIME;
 use alloc::borrow::Cow;
 use alloc::sync::Arc;
 
-use fallible_collections::FallibleArc;
-
 use libc_binding::{OpenFlags, HZ};
 use sync::DeadMutex;
 

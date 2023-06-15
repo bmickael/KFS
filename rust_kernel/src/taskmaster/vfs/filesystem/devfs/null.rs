@@ -7,7 +7,6 @@ use super::{Driver, FileOperation};
 
 use super::InodeId;
 use alloc::sync::Arc;
-use fallible_collections::FallibleArc;
 use libc_binding::OpenFlags;
 use sync::dead_mutex::DeadMutex;
 

@@ -13,7 +13,6 @@ pub mod ipc;
 pub use ipc::{socket::Whom, ConnectedSocket, FifoDriver, FifoFileOperation, Pipe, SocketDgram};
 
 use alloc::sync::Arc;
-use fallible_collections::FallibleArc;
 use libc_binding::{
     gid_t, off_t, stat, statfs, termios, uid_t, Errno, FileType, IoctlCmd, OpenFlags, Pid,
     ShutDownOption, Whence,

@@ -12,7 +12,7 @@ use alloc::boxed::Box;
 use alloc::vec::Vec;
 use core::convert::{TryFrom, TryInto};
 use core::sync::atomic::Ordering;
-use fallible_collections::{btree::BTreeMap, btree::BTreeSet, FallibleBox, TryCollect};
+use fallible_collections::{btree::BTreeMap, btree::BTreeSet, TryCollect};
 use libc_binding::{
     dev_t, gid_t, statfs, time_t, uid_t, Errno, FileType, DEVFS_SUPER_MAGIC, NAME_MAX, PAGE_SIZE,
 };

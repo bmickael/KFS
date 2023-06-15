@@ -10,7 +10,6 @@ use crate::taskmaster::SysResult;
 use super::FileSystemId;
 use alloc::boxed::Box;
 use alloc::sync::Arc;
-use fallible_collections::{FallibleArc, FallibleBox};
 use libc_binding::{
     blkcnt_t, dev_t, gid_t, ino_t, mode_t, nlink_t, off_t, stat, time_t, timespec, uid_t, Errno,
     FileType,
@@ -328,7 +327,7 @@ mod inode_id_should {
     make_test! {{
         use super::Incrementor;
         let make_id = |x| InodeId::new(x, None);
-        let id = make_id(0);
+        let _id = make_id(0);
 
         assert_eq!({let mut id = make_id(0); id.incr(); id}, make_id(1));
 
@@ -356,23 +355,23 @@ impl Incrementor for InodeId {
 #[cfg(test)]
 mod test {
     // use super::VfsHandlerParams;
-    use super::*;
+    // use super::*;
 
-    macro_rules! make_test {
-        ($body: expr, $name: ident) => {
-            #[test]
-            fn $name() {
-                $body
-            }
-        };
-        (failing, $body: expr, $name: ident) => {
-            #[test]
-            #[should_panic]
-            fn $name() {
-                $body
-            }
-        };
-    }
+    // macro_rules! make_test {
+    //     ($body: expr, $name: ident) => {
+    //         #[test]
+    //         fn $name() {
+    //             $body
+    //         }
+    //     };
+    //     (failing, $body: expr, $name: ident) => {
+    //         #[test]
+    //         #[should_panic]
+    //         fn $name() {
+    //             $body
+    //         }
+    //     };
+    // }
 
     // fn test_open(_params: VfsHandlerParams) -> VfsResult<i32> {
     //     Ok(0)

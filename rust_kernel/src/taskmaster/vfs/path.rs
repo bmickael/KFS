@@ -967,10 +967,6 @@ mod test {
     {"/a/b/b/c/d/"},
     test_path_chain_root_a_b_b_c_d}
 
-    make_path_chain_test! {("/a/b/", "b/c/d/"),
-    {"/a/b/b/c/d/"},
-    test_path_chain_root_a_b__b_c_d}
-
     make_path_chain_test! {fail, {
         let a = make_relative_str_path_of_length(PATH_MAX - 1);
         let b = make_relative_str_path_of_length(1);

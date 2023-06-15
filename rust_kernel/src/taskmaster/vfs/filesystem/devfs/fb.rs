@@ -10,7 +10,6 @@ use super::InodeId;
 use alloc::sync::Arc;
 use core::cmp;
 use core::slice;
-use fallible_collections::FallibleArc;
 use libc_binding::{Errno, OpenFlags};
 use sync::dead_mutex::DeadMutex;
 

@@ -12,7 +12,6 @@ use super::vfs::InodeId;
 use alloc::sync::Arc;
 use sync::DeadMutex;
 
-use fallible_collections::arc::FallibleArc;
 use libc_binding::{Errno, OpenFlags};
 
 use core::cmp;

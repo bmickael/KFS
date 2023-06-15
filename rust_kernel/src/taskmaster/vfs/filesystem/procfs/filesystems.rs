@@ -3,7 +3,6 @@ use super::{Driver, FileOperation, InodeId, IpcResult, ProcFsOperations, SysResu
 use alloc::sync::Arc;
 
 use alloc::borrow::Cow;
-use fallible_collections::FallibleArc;
 
 use libc_binding::OpenFlags;
 use sync::DeadMutex;

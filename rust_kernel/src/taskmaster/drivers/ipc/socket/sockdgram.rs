@@ -15,7 +15,7 @@ use alloc::boxed::Box;
 use alloc::collections::VecDeque;
 use alloc::vec::Vec;
 use core::cmp;
-use fallible_collections::{FallibleBox, FallibleVec, TryClone};
+use fallible_collections::{FallibleVec, TryClone};
 use libc_binding::{Errno, FileType, OpenFlags};
 use messaging::MessageTo;
 

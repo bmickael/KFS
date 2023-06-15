@@ -240,13 +240,22 @@ impl Scheduler {
         father_pid: Pid,
         process: Box<UserProcess>,
     ) -> Result<Pid, TryReserveError> {
+        use alloc::alloc::Layout;
+        use alloc::collections::TryReserveErrorKind;
         let pid = self.get_available_pid();
         self.running_process.try_reserve(1)?;
         self.all_process.try_insert(
             pid,
             ThreadGroup::try_new(
                 father_pid,
-                Thread::new(ProcessState::Running(Some(process)))?,
+                Thread::new(ProcessState::Running(Some(process))).map_err(|_| {
+                    let error: TryReserveError = TryReserveErrorKind::AllocError {
+                        layout: Layout::new::<SysResult<AutoPreemptReturnValue>>(),
+                        non_exhaustive: (),
+                    }
+                    .into();
+                    error
+                })?,
                 pid,
             )?,
         )?;

@@ -9,7 +9,6 @@ use alloc::boxed::Box;
 use core::mem::size_of;
 use core::ops::{Index, IndexMut};
 use core::slice::SliceIndex;
-use fallible_collections::FallibleBox;
 
 /// This is the representation of the topmost paging structure.
 /// It is composed of 1024 Entry.

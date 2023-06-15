@@ -5,7 +5,6 @@ use super::SysResult;
 use super::{Driver, FileOperation, IpcResult};
 
 use alloc::sync::Arc;
-use fallible_collections::FallibleArc;
 use libc_binding::{local_buffer, termios, winsize, Errno, IoctlCmd, OpenFlags, Pid};
 use sync::dead_mutex::DeadMutex;
 use terminal::{ReadResult, TERMINAL};

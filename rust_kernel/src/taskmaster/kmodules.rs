@@ -10,7 +10,6 @@ use alloc::boxed::Box;
 use alloc::vec::Vec;
 use ansi_escape_code::Colored;
 use elf_loader::{SegmentType, SymbolTable};
-use fallible_collections::boxed::FallibleBox;
 use irq::Irq;
 use kernel_modules::{
     ForeignAllocMethods, KernelEvent, KernelSymbolList, KeyboardConfig, ModConfig, ModResult,

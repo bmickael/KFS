@@ -16,7 +16,6 @@ use super::drivers::ipc::{ConnectedSocket, Pipe, SocketDgram};
 use alloc::sync::Arc;
 
 use fallible_collections::btree::BTreeMap;
-use fallible_collections::FallibleArc;
 use fallible_collections::TryClone;
 
 use try_clone_derive::TryClone;

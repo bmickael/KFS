@@ -6,7 +6,7 @@ use alloc::string::String;
 use alloc::sync::Arc;
 use alloc::vec::Vec;
 
-use fallible_collections::{FallibleArc, TryCollect};
+use fallible_collections::TryCollect;
 
 use libc_binding::OpenFlags;
 use sync::DeadMutex;

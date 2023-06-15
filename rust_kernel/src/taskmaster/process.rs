@@ -13,10 +13,9 @@ use alloc::sync::Arc;
 use alloc::vec::Vec;
 use core::ffi::c_void;
 use core::slice;
-use fallible_collections::FallibleArc;
 
 use elf_loader::{SegmentType, SymbolTable};
-use fallible_collections::{try_vec, FallibleBox};
+use fallible_collections::try_vec;
 use i386::{BaseRegisters, Eflags, PrivilegeLevel};
 use libc_binding::{c_char, Errno};
 

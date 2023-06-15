@@ -14,7 +14,7 @@ use core::default::Default;
 use core::str;
 use core::sync::atomic::Ordering;
 use ext2::{DirectoryEntryType, Ext2Filesystem};
-use fallible_collections::{FallibleBox, TryCollect};
+use fallible_collections::TryCollect;
 use libc_binding::{gid_t, statfs, uid_t, utimbuf, FileType, EXT2_SUPER_MAGIC, NAME_MAX};
 
 pub mod file;

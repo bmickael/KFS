@@ -475,7 +475,7 @@ mod test {
         use std::alloc::{Global, GlobalAlloc, Layout, System};
 
         const NB_ALLOC: usize = 50000 / 10;
-        let mut allocator: System = System;
+        let allocator: System = System;
 
         const NB_BLOCK: usize = 0x10000;
         let address_space = unsafe {

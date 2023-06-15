@@ -414,7 +414,7 @@ mod directory_entry_id_should {
     make_test! {{
         use super::Incrementor;
         let make_id = |x| DirectoryEntryId::new(x);
-        let id = make_id(0);
+        let _id = make_id(0);
 
         assert_eq!({let mut id = make_id(0); id.incr(); id}, make_id(1));
 

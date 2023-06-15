@@ -8,11 +8,10 @@ use super::syscall::WaitOption;
 use super::thread_group::Status;
 use super::SysResult;
 
+use core::alloc::AllocError;
 use core::ffi::c_void;
-use fallible_collections::FallibleBox;
 
 use alloc::boxed::Box;
-use alloc::collections::TryReserveError;
 
 #[derive(Debug, Copy, Clone)]
 pub enum AutoPreemptReturnValue {
@@ -41,7 +40,7 @@ pub struct Thread {
 }
 
 impl Thread {
-    pub fn new(process_state: ProcessState) -> Result<Self, TryReserveError> {
+    pub fn new(process_state: ProcessState) -> Result<Self, AllocError> {
         Ok(Self {
             process_state,
             signal: SignalInterface::new(),

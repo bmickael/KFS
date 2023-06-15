@@ -9,7 +9,6 @@ use alloc::format;
 use alloc::sync::Arc;
 use core::convert::TryFrom;
 use fallible_collections::vec::FallibleVec;
-use fallible_collections::{FallibleArc, FallibleBox};
 use libc_binding::{dev_t, OpenFlags};
 use sync::DeadMutex;
 

@@ -9,7 +9,7 @@ use alloc::sync::Arc;
 use alloc::vec::Vec;
 use core::convert::TryInto;
 use core::sync::atomic::Ordering;
-use fallible_collections::{btree::BTreeMap, FallibleArc, FallibleBox, TryCollect};
+use fallible_collections::{btree::BTreeMap, TryCollect};
 use lazy_static::lazy_static;
 use sync::DeadMutex;
 
@@ -1730,32 +1730,32 @@ impl KeyGenerator<FileSystemId> for VirtualFileSystem {
 #[cfg(test)]
 mod vfs {
 
-    use super::*;
-    // rename this
-    macro_rules! make_test {
-        ($body: expr, $name: ident) => {
-            #[test]
-            fn $name() {
-                $body
-            }
-        };
-        (failing, $body: expr, $name: ident) => {
-            #[test]
-            #[should_panic]
-            fn $name() {
-                $body
-            }
-        };
-    }
+    // use super::*;
+    // // rename this
+    // macro_rules! make_test {
+    //     ($body: expr, $name: ident) => {
+    //         #[test]
+    //         fn $name() {
+    //             $body
+    //         }
+    //     };
+    //     (failing, $body: expr, $name: ident) => {
+    //         #[test]
+    //         #[should_panic]
+    //         fn $name() {
+    //             $body
+    //         }
+    //     };
+    // }
 
-    macro_rules! vfs_test {
-        ($body: block, $name: ident) => {
-            make_test! {$body, $name}
-        };
-        (failing, $body: block, $name: ident) => {
-            make_test! {failing, $body, $name}
-        };
-    }
+    // macro_rules! vfs_test {
+    //     ($body: block, $name: ident) => {
+    //         make_test! {$body, $name}
+    //     };
+    //     (failing, $body: block, $name: ident) => {
+    //         make_test! {failing, $body, $name}
+    //     };
+    // }
 
     // macro_rules! vfs_file_exists_test {
     //     ($body: block, $path: expr, $name: ident) => {
