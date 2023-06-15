@@ -11,23 +11,17 @@ else
 	rust_archive = target/$(target)/release/lib$(LIBMOD).a
 endif
 
-CARGO_XBUILD_VERSION := $(shell cat xbuild-toolchain)
-
 .PHONY = all clean fclean re exec build_rust
 
-all: .rust-toolchain .xbuild-toolchain build_rust
+all: .rust-toolchain build_rust
 
 .rust-toolchain: rust-toolchain
 	rustup component add rust-src
 	rustup component add rustfmt
 	echo "Updated" > .rust-toolchain
 
-.xbuild-toolchain: xbuild-toolchain
-	cargo install --version $(CARGO_XBUILD_VERSION) cargo-xbuild --force --locked
-	echo "Updated" > .xbuild-toolchain
-
 build_rust:
-	cargo xbuild $(optim_level) --target $(custom_target) --verbose
+	cargo build -Z build-std=core,compiler_builtins,alloc -Z build-std-features=compiler-builtins-mem $(optim_level) --target $(custom_target) --verbose
 	make -C dummy
 	make -C rtc
 	make -C key

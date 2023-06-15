@@ -3,7 +3,6 @@ include ../boilerplates.mk
 arch := ivybridge-cpu
 kernel := build/kernel.elf
 name := turbo_fish
-CARGO_XBUILD_VERSION := $(shell cat xbuild-toolchain)
 QEMU_ARGS = --enable-kvm -cpu IvyBridge -m 128M -kernel $(kernel)
 # These rustc flags are defined in json xbuild file.
 # rustc_flags := -C no-redzone -C target-feature=-mmx,-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-3dnow,-3dnowa,-avx,-avx2
@@ -140,16 +139,12 @@ cargo_flags += $(addprefix --features=,$(rustc_features))
 
 .PHONY: all clean fclean common_clean re exec $(kernel)
 
-all: .rust-toolchain .xbuild-toolchain compile_bootstrap build_rust build_libasm_i386 build_libft $(kernel)
+all: .rust-toolchain compile_bootstrap build_rust build_libasm_i386 build_libft $(kernel)
 
 .rust-toolchain: rust-toolchain
 	rustup component add rust-src
 	rustup component add rustfmt
 	echo "Updated" > .rust-toolchain
-
-.xbuild-toolchain: xbuild-toolchain
-	cargo install --version $(CARGO_XBUILD_VERSION) cargo-xbuild --force --locked
-	echo "Updated" > .xbuild-toolchain
 
 common_clean:
 	find $(OBJ_DIR) -type f -name '*.o' -delete
@@ -202,7 +197,7 @@ $(kernel): src/boot/bootstrap/build/bootstrap.o $(OBJ_ASM_KERNEL) $(OBJ_C_KERNEL
 	$(link_kernel)
 
 build_rust:
-	cargo xbuild $(cargo_flags) --target $(custom_target) --verbose
+	cargo build -Z build-std=core,compiler_builtins,alloc -Z build-std-features=compiler-builtins-mem $(cargo_flags) --target $(custom_target) --verbose
 
 build_libasm_i386:
 	make -C libasm_i386 all

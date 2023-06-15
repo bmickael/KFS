@@ -83,9 +83,6 @@ Switch the default toolchain to *nightly*
 Install the default host target to *i686-unknown-linux-gnu*   
 `rustup target add i686-unknown-linux-gnu`
 
-## You need *xbuild* to cross-compile the rust libcore  
-`cargo install cargo-xbuild`
-
 Then, to recompile *libcore*, you need rust sources   
 `rustup component add rust-src`
 
