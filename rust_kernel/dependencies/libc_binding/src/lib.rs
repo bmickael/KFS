@@ -1,3 +1,5 @@
+#![feature(allocator_api)]
+
 #![allow(non_camel_case_types)]
 #![allow(non_upper_case_globals)]
 #![cfg_attr(not(test), no_std)]
@@ -37,8 +39,15 @@ impl TryFrom<u32> for Signum {
 extern crate const_assert;
 extern crate alloc;
 use alloc::collections::TryReserveError;
+use core::alloc::AllocError;
 impl From<TryReserveError> for Errno {
     fn from(_e: TryReserveError) -> Self {
+        Errno::ENOMEM
+    }
+}
+
+impl From<AllocError> for Errno {
+    fn from(_e: AllocError) -> Self {
         Errno::ENOMEM
     }
 }
