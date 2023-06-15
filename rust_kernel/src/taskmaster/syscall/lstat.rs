@@ -29,7 +29,12 @@ pub fn sys_lstat(filename: *const c_char, buf: *mut stat) -> SysResult<u32> {
         let tg = scheduler.current_thread_group();
         let creds = &tg.credentials;
         let cwd = &tg.cwd;
-        VFS.lock().lstat(cwd, creds, path, safe_buf)?;
-        Ok(0)
+        match VFS.lock().lstat(cwd, creds, path) {
+            Ok(stat) => {
+                *safe_buf = stat;
+                Ok(0)
+            },
+            Err(value) => Err(value),
+        }
     })
 }

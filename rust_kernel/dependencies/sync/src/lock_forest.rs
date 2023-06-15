@@ -7,12 +7,14 @@ use core::sync::atomic::{AtomicBool, AtomicUsize};
 // true means locked
 pub struct RawLock(AtomicBool);
 
-/// a Raw lock implemeneted with Atomic
+/// a Raw lock implemented with Atomic
 impl RawLock {
     fn try_lock(&self) -> bool {
         let current = false;
-        let old = self.0.compare_and_swap(current, true, Ordering::SeqCst);
-        old == current
+        match self.0.compare_exchange(current, true, Ordering::SeqCst, Ordering::SeqCst) {
+            Ok(_) => true,
+            Err(_) => false,
+        }
     }
     fn unlock(&self) {
         self.0.store(false, Ordering::SeqCst);
@@ -20,9 +22,6 @@ impl RawLock {
     fn new() -> Self {
         Self(AtomicBool::new(false))
     }
-    // fn new_locked() -> Self {
-    //     Self(AtomicBool::new(true))
-    // }
 }
 
 pub struct LockGuard<'a, T>(&'a mut Lock<T>);

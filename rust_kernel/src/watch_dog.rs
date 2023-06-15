@@ -28,7 +28,8 @@ pub fn watch_dog() {
     let checksum_rodata = hash_section(symbol_addr!(__start_rodata), symbol_addr!(__end_rodata));
     unsafe {
         let curr_idt = InterruptTable::current_interrupt_table();
-        let ivt_bios = *(0x0 as *const IvtBios);
+        let ivt_bios_ptr: *const IvtBios = core::ptr::null(); // IVT bios is ar address 0
+        let ivt_bios = *(ivt_bios_ptr);
         match &mut WATCH_DOG {
             None => {
                 let mut idt: [IdtGateEntry; InterruptTable::DEFAULT_IDT_SIZE as usize] =

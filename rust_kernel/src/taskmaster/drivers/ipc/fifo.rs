@@ -22,6 +22,7 @@ use messaging::MessageTo;
 /// Stucture of FifoDriver
 #[derive(Debug)]
 pub struct FifoDriver {
+    #[allow(dead_code)]
     inode_id: InodeId,
     operation: Arc<DeadMutex<FifoFileOperationData>>,
 }
@@ -93,6 +94,7 @@ pub struct FifoFileOperationData {
     output_ref: usize,
     current_index: usize,
     file_op_uid: usize,
+    #[allow(dead_code)]
     ref_count: usize,
 }
 

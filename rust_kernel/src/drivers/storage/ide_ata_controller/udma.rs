@@ -20,6 +20,7 @@ pub struct Udma {
     memory: Vec<Vec<u8>>,
     bus_mastered_register: u16,
     channel: Channel,
+    #[allow(dead_code)]
     prdt: Box<Prdt>,
 }
 
@@ -123,12 +124,13 @@ impl Udma {
         // Init a new PRDT
         init_prdt(prdt.as_mut(), &mut memory);
 
-        let physical_prdt_address = get_physical_addr(Virt(prdt.as_ref() as *const _ as usize))
-            .expect("Buddy Allocator is bullshit")
-            .0;
+        let physical_prdt_address = get_physical_addr(Virt(prdt.as_ref() as *const _ as usize));
+        if physical_prdt_address == core::ptr::null_mut() {
+            panic!("Buddy Allocator is bullshit")
+        }
 
         // Check if physical_prdt_address is 'self' aligned and so cannot cross a 64k boundary
-        assert!(physical_prdt_address % core::mem::size_of::<Prdt>() == 0);
+        assert!(physical_prdt_address as usize % core::mem::size_of::<Prdt>() == 0);
 
         // Set the IO/PORT on Bus master register with physical DMA PRDT Address
         Pio::<u32>::new(bus_mastered_register + Self::DMA_PRDT_ADDR)
@@ -230,11 +232,14 @@ impl Udma {
 fn init_prdt(prdt: &mut Prdt, memory_zone: &mut Vec<Vec<u8>>) {
     for (mem, prd) in memory_zone.iter().zip(prdt.0.iter_mut()) {
         let addr =
-            get_physical_addr(Virt(mem.as_ptr() as usize)).expect("Buddy Allocator is bullshit");
+            get_physical_addr(Virt(mem.as_ptr() as usize));
+        if addr == core::ptr::null_mut() {
+            panic!("Buddy Allocator is bullshit");
+        }
         // Check if data buffers are 64K aligned
-        assert!(addr.0 & 0xffff == 0);
+        assert!(addr as usize & 0xffff == 0);
         *prd = PrdEntry {
-            addr,
+            addr: Phys(addr as usize),
             size: 0,
             is_end: 0,
         }

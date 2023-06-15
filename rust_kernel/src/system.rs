@@ -8,7 +8,6 @@ use interrupts::GateType;
 use interrupts::GateType::{InterruptGate32, TrapGate32};
 
 /// get the symbol addr
-#[macro_use]
 macro_rules! symbol_addr {
     ($ident: ident) => {
         #[allow(unused_unsafe)]
@@ -19,7 +18,7 @@ macro_rules! symbol_addr {
 }
 pub struct Cr0;
 
-#[no_mangle]
+
 extern "C" {
     /// reg is the input parameter and the output
     fn _int8086(reg: *mut BaseRegisters, bios_int: u16) -> u16;

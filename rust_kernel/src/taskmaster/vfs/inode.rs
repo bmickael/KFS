@@ -91,8 +91,8 @@ impl Inode {
             lazy_unlink: false,
         })
     }
-    pub fn stat(&self, stat: &mut stat) -> SysResult<u32> {
-        self.inode_data.stat(stat)
+    pub fn stat(&self) -> SysResult<stat> {
+        self.inode_data.stat()
     }
     pub fn write(&mut self, offset: &mut u64, buf: &[u8]) -> SysResult<u32> {
         // TODO: update size in inode data
@@ -179,8 +179,8 @@ impl InodeData {
         self.size = size;
     }
 
-    pub fn stat(&self, stat: &mut stat) -> SysResult<u32> {
-        *stat = stat {
+    pub fn stat(&self) -> SysResult<stat> {
+        Ok(stat {
             st_dev: self.major << 8 | self.minor, // Device ID of device containing file.
             st_ino: self.id.inode_number as ino_t, // File serial number.
             st_mode: self.access_mode.bits() as mode_t, // Mode of file (see below).
@@ -204,8 +204,7 @@ impl InodeData {
             }, // Last file status change timestamp.
             st_blksize: 1024, //self.ext2.lock().get_block_size() as blksize_t, // A file system-specific preferred I/O block size
             st_blocks: self.nbr_disk_sectors, //self.nbr_disk_sectors as blkcnt_t, // Number of blocks allocated for this object.
-        };
-        Ok(0)
+        })
     }
     // Builder Pattern
     pub fn set_id(&mut self, id: InodeId) -> &mut Self {

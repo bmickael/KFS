@@ -507,7 +507,6 @@ fn connect(socket_fd: i32, sockaddr: Sockaddr) -> SysResult<u32> {
             let mut file_operation = fd_interface.get_file_operation(socket_fd as u32)?;
             let res = file_operation.connect(cwd, creds, path.try_clone()?)?;
             drop(file_operation);
-            drop(tg);
             match res {
                 IpcResult::Wait(_, file_op_uid) => {
                     scheduler
@@ -692,7 +691,6 @@ fn send_to(
             };
             let res = file_operation.send_to(creds, buf, flags, resolved_path)?;
             drop(file_operation);
-            drop(tg);
             match res {
                 IpcResult::Wait(_res, file_op_uid) => {
                     scheduler

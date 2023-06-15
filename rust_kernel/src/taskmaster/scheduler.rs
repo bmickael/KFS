@@ -33,7 +33,7 @@ use terminal::TERMINAL;
 
 use crate::drivers::PIT0;
 
-/// These extern functions are coded in low level assembly. They are 'arch specific i686'
+// These extern functions are coded in low level assembly. They are 'arch specific i686'
 extern "C" {
     /// Usable by blocking syscalls. 'Freeze' a given proces then switch to another process.
     fn _auto_preempt() -> i32;

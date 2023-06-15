@@ -544,7 +544,7 @@ impl PicConfiguration {
     }
 }
 
-/// PIC idt vectors
+// PIC idt vectors
 extern "C" {
     static mut _pic_handlers_array: [u32; 16];
 }

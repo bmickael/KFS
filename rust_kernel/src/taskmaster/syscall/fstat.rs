@@ -23,6 +23,12 @@ pub fn sys_fstat(fd: Fd, buf: *mut stat) -> SysResult<u32> {
             .file_descriptor_interface;
 
         let file_operation = &mut fd_interface.get_file_operation(fd)?;
-        file_operation.fstat(safe_buf)
+        match file_operation.fstat() {
+            Ok(ret_stat) => {
+                *safe_buf = ret_stat;
+                Ok(0)
+            },
+            Err(e) => Err(e)
+        }
     })
 }

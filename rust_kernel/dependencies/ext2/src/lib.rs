@@ -1,8 +1,9 @@
 //! this module contains a ext2 driver
 //! see [osdev](https://wiki.osdev.org/Ext2)
+#![feature(maybe_uninit_uninit_array)]
+#![feature(maybe_uninit_array_assume_init)]
 
 #![cfg_attr(all(not(test), not(feature = "std-print")), no_std)]
-// #![deny(missing_docs)]
 
 mod disk;
 use crate::disk::Disk;
@@ -34,7 +35,7 @@ use alloc::boxed::Box;
 use alloc::vec::Vec;
 use bit_field::BitArray;
 
-use core::mem::size_of;
+use core::mem::{size_of, MaybeUninit};
 
 /// Global structure of ext2Filesystem, such as disk partition.
 #[derive(Debug)]
@@ -80,6 +81,7 @@ impl<'a> Iterator for EntryIter<'a> {
 }
 
 /// The Kernel side FileDescriptor struct
+#[allow(dead_code)]
 #[derive(Debug, Copy, Clone)]
 pub struct File {
     /// Inode number
@@ -144,21 +146,22 @@ impl Ext2Filesystem {
     ) -> IoResult<(InodeNbr, (DirectoryEntry, OffsetDirEntry))> {
         let mut inode_nbr = 2;
         let mut parent_inode_nbr = 2;
-        let mut entry = unsafe { core::mem::uninitialized() };
+        let mut last_entry = None;
         path = path.trim();
         if path == "/" {
             path = "/.";
         }
         for p in path.split('/').filter(|x| x != &"") {
             parent_inode_nbr = inode_nbr;
-            entry = self
+            let entry = self
                 .iter_entries(inode_nbr)?
                 .find(|(x, _)| unsafe { x.get_filename() } == p)
                 .ok_or(Errno::ENOENT)?;
 
             inode_nbr = entry.0.get_inode();
+            last_entry = Some(entry);
         }
-        Ok((parent_inode_nbr, entry))
+        Ok((parent_inode_nbr, last_entry.expect("Must be altmost Some()")))
     }
 
     pub fn find_entry_in_inode(
@@ -915,14 +918,14 @@ struct Cache<K, T> {
 impl<K: Eq + PartialEq + Copy, T: Clone + Default> Cache<K, T> {
     /// Create a new multi layer cache
     fn new(nb_elems: usize) -> Self {
-        let mut entries: [CacheEntry<K, T>; NB_LAYERS] = unsafe { core::mem::uninitialized() };
+        let mut entries: [MaybeUninit<CacheEntry<K, T>>; NB_LAYERS] = MaybeUninit::uninit_array();
         for entry in entries.iter_mut() {
-            *entry = CacheEntry::new(nb_elems);
+            entry.write(CacheEntry::new(nb_elems));
         }
-        Self { entries }
+        Self { entries : unsafe { MaybeUninit::array_assume_init(entries) } }
     }
 
-    /// Invalidate all the layers
+    /// Invalidate all the layers()
     fn invalidate(&mut self) {
         for entry in self.entries.iter_mut() {
             entry.invalidate();

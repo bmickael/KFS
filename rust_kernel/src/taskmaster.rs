@@ -46,7 +46,7 @@ impl<T> IpcResult<T> {
     pub fn expect(self, s: &'static str) -> T {
         match self {
             IpcResult::Done(t) => t,
-            IpcResult::Wait(_, _) => panic!(s),
+            IpcResult::Wait(_, _) => panic!("{}", s),
         }
     }
 }

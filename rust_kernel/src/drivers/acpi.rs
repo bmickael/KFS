@@ -16,6 +16,7 @@ use core::time::Duration;
 use crate::Spinlock;
 use lazy_static::lazy_static;
 
+#[allow(dead_code)]
 #[derive(Copy, Clone, Debug)]
 #[repr(packed)]
 struct RSDPDescriptor10 {
@@ -27,6 +28,7 @@ struct RSDPDescriptor10 {
 }
 
 /// ACPI version 2+ RSDP structure
+#[allow(dead_code)]
 #[derive(Copy, Clone, Debug)]
 #[repr(packed)]
 struct RSDPDescriptor20 {
@@ -40,6 +42,7 @@ struct RSDPDescriptor20 {
 }
 
 /// ACPI version 1 RSDT structure
+#[allow(dead_code)]
 #[derive(Copy, Clone, Debug)]
 #[repr(packed)]
 struct ACPIRSDTHeader {
@@ -56,6 +59,7 @@ struct ACPIRSDTHeader {
 }
 
 /// ACPI version 2+ XSDT structure
+#[allow(dead_code)]
 #[derive(Copy, Clone, Debug)]
 #[repr(packed)]
 struct ACPIXSDTHeader {
@@ -78,6 +82,7 @@ struct Rsdt {
     others_rsdt: *const Rsdt,
 }
 
+#[allow(dead_code)]
 #[derive(Copy, Clone, Debug)]
 #[repr(packed)]
 struct Xsdt {
@@ -86,6 +91,7 @@ struct Xsdt {
     next_xsdt_low_32_63: u32,
 }
 
+#[allow(dead_code)]
 #[derive(Copy, Clone, Debug)]
 #[repr(packed)]
 struct GenericAddressStructure {
@@ -100,6 +106,7 @@ struct GenericAddressStructure {
 /// [fadt](https://wiki.osdev.org/FADT)
 /// Fixed ACPI Description Table
 /// It is the fucking big table of ACPI (see acpidump)
+#[allow(dead_code)]
 #[derive(Copy, Clone, Debug)]
 #[repr(packed)]
 struct FADT {
@@ -190,6 +197,7 @@ struct FADT {
 *     Compiler ID      "INTL"
 *     Compiler Version 0x20050624 (537200164)
 */
+#[allow(dead_code)]
 #[derive(Copy, Clone, Debug)]
 #[repr(packed)]
 struct DsdtHeader {
@@ -224,6 +232,7 @@ struct DsdtHeader {
 //
 // PackageOP
 
+#[allow(dead_code)]
 #[derive(Copy, Clone, Debug)]
 #[repr(packed)]
 struct S5Object {

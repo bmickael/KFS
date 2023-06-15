@@ -321,7 +321,7 @@ pub fn add_syslog_entry(entry: &str) -> Result<(), Errno> {
     Ok(())
 }
 
-/// Common allocator methods for modules
+// Common allocator methods for modules
 extern "C" {
     fn kmalloc(len: usize) -> *mut u8;
     fn kcalloc(count: usize, size: usize) -> *mut u8;

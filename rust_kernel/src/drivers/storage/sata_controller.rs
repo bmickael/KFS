@@ -8,6 +8,7 @@ use raw_data::define_raw_data;
 
 use alloc::vec::Vec;
 
+#[allow(dead_code)]
 #[derive(Debug, Copy, Clone)]
 #[repr(packed)]
 struct HbaMem {
@@ -36,6 +37,7 @@ struct HbaMem {
 define_raw_data!(Reserved, 0xA0 - 0x2C);
 define_raw_data!(VendorSpecificRegisters, 0x100 - 0xA0);
 
+#[allow(dead_code)]
 #[derive(Debug, Copy, Clone)]
 #[repr(packed)]
 struct HbaPort {
@@ -67,6 +69,7 @@ struct HbaPort {
 define_raw_data!(ReservedPort, 0x70 - 0x44);
 define_raw_data!(VendorSpecificPort, 0x80 - 0x70);
 
+#[allow(dead_code)]
 #[derive(Copy, Clone, Debug)]
 pub struct SataController {
     pci: PciType0,

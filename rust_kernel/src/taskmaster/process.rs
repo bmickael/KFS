@@ -581,9 +581,7 @@ pub fn get_file_content(cwd: &Path, creds: &Credentials, path: Path) -> SysResul
         IpcResult::Wait(file_operator, _) => file_operator,
     };
     let mut file = file_operator.lock();
-
-    let mut stat = unsafe { core::mem::uninitialized() };
-    file.fstat(&mut stat)?;
+    let stat = file.fstat()?;
 
     let file_size = stat.st_size;
 

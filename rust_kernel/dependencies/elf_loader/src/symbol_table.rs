@@ -72,6 +72,7 @@ use alloc::vec::Vec;
 use core::{mem, slice};
 
 /// This structure represents one symbol entry in a .symtab section in elf file
+#[allow(dead_code)]
 #[derive(Debug)]
 struct ElfSymbolEntry {
     name: u32,
@@ -83,6 +84,7 @@ struct ElfSymbolEntry {
 }
 
 /// This structure represents one symbol entry in human readable format style
+#[allow(dead_code)]
 #[derive(Debug)]
 struct SymbolEntry {
     name: String,

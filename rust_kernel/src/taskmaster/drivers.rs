@@ -49,13 +49,12 @@ pub trait FileOperation: core::fmt::Debug + Send {
         Err(Errno::ENOSYS)
     }
 
-    fn fstat(&mut self, stat: &mut stat) -> SysResult<u32> {
+    fn fstat(&mut self) -> SysResult<stat> {
         let inode_id = self.get_inode_id()?;
         VFS.lock()
             .get_inode(inode_id)
             .expect("no such inode")
-            .stat(stat)?;
-        Ok(0)
+            .stat()
     }
 
     fn fchmod(&mut self, _creds: &Credentials, _mode: FileType) -> SysResult<u32> {

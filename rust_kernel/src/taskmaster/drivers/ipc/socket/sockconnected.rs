@@ -328,6 +328,7 @@ impl ConnectedSocketDriver {
 }
 
 /// This structure represents a FileOperation of type Socket
+#[allow(dead_code)]
 #[derive(Debug)]
 pub struct ConnectedSocket {
     /// we only handle AF_UNIX domain

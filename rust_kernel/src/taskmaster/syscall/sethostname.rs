@@ -13,7 +13,7 @@ fn sethostname(name: &[u8]) -> SysResult<u32> {
         return Err(Errno::EINVAL);
     }
 
-    &hostname[..name.len()].copy_from_slice(name);
+    hostname[..name.len()].copy_from_slice(name);
     hostname[name.len()] = '\0' as u8;
     Ok(0)
 }

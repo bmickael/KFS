@@ -16,7 +16,7 @@ use i386::BaseRegisters;
 use core::convert::TryInto;
 use core::slice;
 
-/// This module call 16 bits payloads which contain interrupt 13h calls
+// This module call 16 bits payloads which contain interrupt 13h calls
 extern "C" {
     static payload_13h_check_extension_present: extern "C" fn();
     static payload_13h_check_extension_present_len: usize;
@@ -29,6 +29,7 @@ extern "C" {
 }
 
 /// Main Structure
+#[allow(dead_code)]
 #[derive(Debug, Copy, Clone)]
 pub struct BiosInt13h {
     /// Device where bios boot into. (80h, 81h ...)
@@ -59,6 +60,7 @@ bitflags! {
 }
 
 /// Packet sended and returned with payload_13h_extended_read_drive_parameters
+#[allow(dead_code)]
 #[derive(Debug, Copy, Clone)]
 #[repr(packed)] // ! Representation packed is mandatory for this kind of structure !
 struct DriveParameters {
@@ -165,7 +167,7 @@ impl BiosInt13h {
         let mut reg: BaseRegisters = BaseRegisters {
             ..Default::default()
         };
-        let mut p: *mut DriveParameters = DAP_LOCATION as *mut _;
+        let p: *mut DriveParameters = DAP_LOCATION as *mut _;
         unsafe {
             (*p).result_size = 0x1E;
         }
@@ -338,7 +340,7 @@ fn check_bounds(
 
 /// Create a new DAP structure for write and read transactions
 unsafe fn create_dap(start_sector: Sector, nb_sectors: NbrSectors, addr: usize) {
-    let mut dap: *mut Dap = addr as *mut _;
+    let dap: *mut Dap = addr as *mut _;
 
     (*dap).size_of_dap = 0x10;
     (*dap).unused = 0;

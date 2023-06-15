@@ -90,8 +90,10 @@ impl SocketDgramDriver {
 #[derive(Debug)]
 pub struct SocketDgram {
     /// we only handle AF_UNIX domain
+    #[allow(dead_code)]
     domain: socket::Domain,
     /// the type of the socket(Dgram, Stream, SeqPacket)
+    #[allow(dead_code)]
     socket_type: socket::SocketType,
     /// the inode id of the socket if it is binded
     inode_id: InodeId,

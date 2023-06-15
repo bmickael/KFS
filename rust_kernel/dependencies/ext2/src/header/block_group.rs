@@ -3,6 +3,7 @@
 use super::Block;
 
 /// Common structure of a block groupe
+#[allow(dead_code)]
 #[derive(Debug, Copy, Clone)]
 #[repr(packed)]
 pub struct BlockGroupDescriptor {

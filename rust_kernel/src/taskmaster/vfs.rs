@@ -1434,13 +1434,12 @@ impl VirtualFileSystem {
         cwd: &Path,
         creds: &Credentials,
         path: Path,
-        buf: &mut stat,
-    ) -> SysResult<u32> {
+    ) -> SysResult<stat> {
         let entry_id = self.pathname_resolution(cwd, creds, &path)?;
         let entry = self.dcache.get_entry(&entry_id)?;
         let inode_id = entry.inode_id;
         let inode = self.get_inode(inode_id)?;
-        inode.stat(buf)
+        inode.stat()
     }
 
     pub fn lstat(
@@ -1448,13 +1447,12 @@ impl VirtualFileSystem {
         cwd: &Path,
         creds: &Credentials,
         path: Path,
-        buf: &mut stat,
-    ) -> SysResult<u32> {
+    ) -> SysResult<stat> {
         let entry_id = self.pathname_resolution_no_follow_last_symlink(cwd, creds, &path)?;
         let entry = self.dcache.get_entry(&entry_id)?;
         let inode_id = entry.inode_id;
         let inode = self.get_inode(inode_id)?;
-        inode.stat(buf)
+        inode.stat()
     }
 
     pub fn readlink(

@@ -85,7 +85,7 @@ impl DmaIo for Drive {
         // Copy the Buf into the UDMA content
         let s = unsafe { core::slice::from_raw_parts(buf, sectors_to_write.into()) };
         for (i, chunk) in s.chunks(Udma::PRD_SIZE.into()).enumerate() {
-            &udma.get_memory()[i][0..chunk.len()].copy_from_slice(chunk);
+            udma.get_memory()[i][0..chunk.len()].copy_from_slice(chunk);
         }
 
         udma.set_write(); /* 1 */

@@ -122,8 +122,8 @@ impl FileOperation for Pipe {
         }
     }
 
-    fn fstat(&mut self, _stat: &mut stat) -> SysResult<u32> {
+    fn fstat(&mut self) -> SysResult<stat> {
         // TODO: This is for ls | cat -e to works, because cat do a fstat(0)
-        Ok(0)
+        Ok(stat::default()) // This is bullshit
     }
 }

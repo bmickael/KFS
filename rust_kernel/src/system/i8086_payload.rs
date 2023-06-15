@@ -57,7 +57,7 @@ extern "C" {
     static payload_apm_shutdown_len: usize;
 }
 
-pub extern "C" fn i8086_payload_apm_shutdown() -> I8086PayloadResult<()> {
+pub fn i8086_payload_apm_shutdown() -> I8086PayloadResult<()> {
     let mut reg: BaseRegisters = BaseRegisters {
         ..Default::default()
     };

@@ -264,7 +264,7 @@ struct PrimitiveKernelSymbolList {
     ptr: *const KernelSymbol,
 }
 
-/// Get the entire symbol List
+// Get the entire symbol List
 extern "C" {
     fn get_primitive_kernel_symbol_list() -> PrimitiveKernelSymbolList;
 }

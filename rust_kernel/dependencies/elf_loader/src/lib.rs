@@ -1,4 +1,3 @@
-#![feature(try_reserve)]
 #![allow(non_upper_case_globals)]
 #![cfg_attr(all(not(test), not(feature = "std-print")), no_std)]
 use bitflags::bitflags;
@@ -208,6 +207,7 @@ impl TryFrom<u16> for Architecture {
     }
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Copy, Clone)]
 #[repr(packed)]
 pub struct ElfHeader {

@@ -573,7 +573,7 @@ mod context_builder {
         }
     }
 
-    /// Extern ASM trampoline function for stack smaching
+    // Extern ASM trampoline function for stack smaching
     extern "C" {
         static _trampoline: u8;
         static _trampoline_len: u32;

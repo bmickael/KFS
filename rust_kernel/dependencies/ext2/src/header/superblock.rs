@@ -7,6 +7,7 @@ use bitflags::bitflags;
 use core::fmt;
 
 /// Common structure of a SuperBlock
+#[allow(dead_code)]
 #[derive(Debug, Copy, Clone)]
 #[repr(packed)]
 pub struct SuperBlock {

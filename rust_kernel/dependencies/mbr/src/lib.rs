@@ -1,10 +1,14 @@
 //! This crate provide methods to read Master Boot record
+#![feature(maybe_uninit_uninit_array)]
+#![feature(maybe_uninit_array_assume_init)]
+
 #![cfg_attr(not(test), no_std)]
 
-use core::mem;
+use core::mem::{self, MaybeUninit};
 use raw_data::define_raw_data;
 
 /// Main crate structure
+#[allow(dead_code)]
 #[derive(Debug, Copy, Clone)]
 pub struct Mbr {
     physical_mbr: PhysicalMbr,
@@ -42,6 +46,7 @@ enum PartitionType {
 }
 
 /// Defined real MBR Structure
+#[allow(dead_code)]
 #[derive(Debug, Copy, Clone)]
 #[repr(packed)]
 struct PhysicalMbr {
@@ -66,6 +71,7 @@ struct PhysicalMbr {
 define_raw_data!(FlatBinaryExecutableCode, 440);
 
 /// Defined real Partition structure
+#[allow(dead_code)]
 #[derive(Debug, Copy, Clone)]
 #[repr(packed)]
 struct PhysicalPartitionField {
@@ -109,19 +115,19 @@ impl Mbr {
         } else {
             false
         };
-        let mut parts: [Partition; 4] = core::mem::uninitialized();
+        let mut parts: [MaybeUninit<Partition>; 4] = MaybeUninit::uninit_array();
         for (i, elem) in parts.iter_mut().enumerate() {
-            *elem = Partition {
+            elem.write(Partition {
                 part_type: PartitionType::from(physical_mbr.partitions[i].partition_type),
                 start: physical_mbr.partitions[i].lba_start,
                 size: physical_mbr.partitions[i].nb_sector,
                 drive_attribute: physical_mbr.partitions[i].drive_attribute,
-            };
+            });
         }
         Self {
             physical_mbr,
             bootable,
-            parts,
+            parts: MaybeUninit::array_assume_init(parts),
         }
     }
 }

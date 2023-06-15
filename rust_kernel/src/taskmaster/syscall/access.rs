@@ -4,7 +4,7 @@ use super::vfs::Path;
 use super::SysResult;
 use core::convert::TryFrom;
 
-use libc_binding::{c_char, stat, Amode, Errno, FileType};
+use libc_binding::{c_char, Amode, Errno, FileType};
 
 pub fn sys_access(path: *const c_char, amode: u32) -> SysResult<u32> {
     unpreemptible_context!({
@@ -22,8 +22,7 @@ pub fn sys_access(path: *const c_char, amode: u32) -> SysResult<u32> {
         let creds = &tg.credentials;
 
         let path = Path::try_from(safe_path)?;
-        let mut buf: stat = Default::default();
-        statfn(&scheduler, path, &mut buf)?;
+        let buf = statfn(&scheduler, path)?;
         let amode = Amode::from_bits(amode).ok_or(Errno::EINVAL)?;
         let filetype =
             FileType::from_bits(buf.st_mode as u16).expect("filetypes bits should be valid");

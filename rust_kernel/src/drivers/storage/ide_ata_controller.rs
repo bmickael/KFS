@@ -43,7 +43,9 @@ pub struct IdeAtaController {
     primary_slave: Option<Drive>,
     secondary_slave: Option<Drive>,
     selected_drive: Option<Rank>,
+    #[allow(dead_code)]
     pci: PciType0,
+    #[allow(dead_code)]
     pci_location: u32,
     operating_mode: OperatingMode,
     udma_capable: bool,
@@ -58,6 +60,7 @@ struct Drive {
     control_register: u16,
     capabilities: Capabilities,
     sector_capacity: NbrSectors,
+    #[allow(dead_code)]
     udma_support: u16,
     rank: Rank,
 }
