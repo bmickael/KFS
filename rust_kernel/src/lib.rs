@@ -3,10 +3,9 @@
 #![feature(stmt_expr_attributes)]
 #![feature(slice_index_methods)]
 #![feature(allocator_api)]
-#![feature(try_reserve_kind)]
 #![feature(alloc_error_handler)]
-#![feature(drain_filter)]
 #![feature(core_intrinsics)]
+#![feature(extract_if)]
 
 #[macro_use]
 extern crate fallible_collections;

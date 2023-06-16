@@ -210,7 +210,7 @@ impl Scheduler {
                                 let _r = self
                                     .kernel_modules
                                     .second_cycle
-                                    .drain_filter(|elem| *elem == p)
+                                    .extract_if(|elem| *elem == p)
                                     .collect::<Vec<_>>();
                             }
                         }

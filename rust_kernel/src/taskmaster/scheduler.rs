@@ -17,7 +17,6 @@ mod second_callback;
 use second_callback::{second_callback_handler, SECOND_CALLBACK_TRIGGER};
 
 use alloc::boxed::Box;
-use alloc::collections::TryReserveError;
 use alloc::vec::Vec;
 use ansi_escape_code::Colored;
 use core::ffi::c_void;
@@ -239,23 +238,14 @@ impl Scheduler {
         &mut self,
         father_pid: Pid,
         process: Box<UserProcess>,
-    ) -> Result<Pid, TryReserveError> {
-        use alloc::alloc::Layout;
-        use alloc::collections::TryReserveErrorKind;
+    ) -> Result<Pid, Errno> {
         let pid = self.get_available_pid();
         self.running_process.try_reserve(1)?;
         self.all_process.try_insert(
             pid,
             ThreadGroup::try_new(
                 father_pid,
-                Thread::new(ProcessState::Running(Some(process))).map_err(|_| {
-                    let error: TryReserveError = TryReserveErrorKind::AllocError {
-                        layout: Layout::new::<SysResult<AutoPreemptReturnValue>>(),
-                        non_exhaustive: (),
-                    }
-                    .into();
-                    error
-                })?,
+                Thread::new(ProcessState::Running(Some(process)))?,
                 pid,
             )?,
         )?;

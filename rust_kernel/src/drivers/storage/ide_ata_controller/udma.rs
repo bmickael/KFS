@@ -11,8 +11,8 @@ use crate::memory::tools::*;
 use alloc::boxed::Box;
 use alloc::vec::Vec;
 
-use alloc::collections::TryReserveError;
 use fallible_collections::try_vec;
+use libc_binding::Errno;
 
 /// Global UDMA structure
 #[derive(Clone)]
@@ -113,20 +113,10 @@ impl Udma {
     pub fn init(
         mut bus_mastered_register: u16,
         channel: Channel,
-    ) -> core::result::Result<Self, TryReserveError> {
+    ) -> core::result::Result<Self, Errno> {
         // The data buffers cannot cross a 64K boundary
         let mut memory = try_vec![try_vec![0; Self::PRD_SIZE]?; Self::NBR_DMA_ENTRIES]?;
-
-        use alloc::alloc::Layout;
-        use alloc::collections::TryReserveErrorKind;
-        let mut prdt = Box::try_new(Prdt::new()).map_err(|_| {
-            let error: TryReserveError = TryReserveErrorKind::AllocError {
-                layout: Layout::new::<Prdt>(),
-                non_exhaustive: (),
-            }
-            .into();
-            error
-        })?;
+        let mut prdt = Box::try_new(Prdt::new())?;
 
         // Qemu quick fix
         bus_mastered_register &= 0xfffe;
