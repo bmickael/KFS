@@ -5,7 +5,6 @@
   "dynamic-linking": false,
   "env": "gnu",
   "executables": true,
-  "has-elf-tls": true,
   "has-rpath": true,
   "linker-flavor": "gcc",
   "linker-is-gnu": true,
