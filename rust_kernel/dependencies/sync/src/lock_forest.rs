@@ -1,5 +1,6 @@
 //! this is LockForest, a Lock free Queue
 use alloc::vec::Vec;
+use core::cell::UnsafeCell;
 use core::ops::{Deref, DerefMut};
 use core::sync::atomic::Ordering;
 use core::sync::atomic::{AtomicBool, AtomicUsize};
@@ -27,7 +28,7 @@ impl RawLock {
     }
 }
 
-pub struct LockGuard<'a, T>(&'a mut Lock<T>);
+pub struct LockGuard<'a, T>(&'a Lock<T>);
 
 impl<'a, T> Drop for LockGuard<'a, T> {
     fn drop(&mut self) {
@@ -39,40 +40,40 @@ impl<'a, T> Deref for LockGuard<'a, T> {
     type Target = T;
 
     fn deref(&self) -> &Self::Target {
-        &self.0.data
+        unsafe { &*self.0.data.get() }
     }
 }
 
 impl<'a, T> DerefMut for LockGuard<'a, T> {
     fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0.data
+        unsafe { &mut *self.0.data.get() }
     }
 }
 
 /// A lock Wrapper for a generic Datatype
 pub struct Lock<T> {
-    data: T,
+    data: UnsafeCell<T>,
     raw_lock: RawLock,
 }
 
 impl<'a, T> Lock<T> {
     fn new(data: T) -> Self {
         Lock {
-            data,
+            data: UnsafeCell::new(data),
             raw_lock: RawLock::new(),
         }
     }
     fn try_lock(&'a self) -> Option<LockGuard<'a, T>> {
         if self.raw_lock.try_lock() {
-            Some(LockGuard(unsafe {
-                #[allow(cast_ref_to_mut)]
-                &mut *(self as *const Self as *mut Self)
-            }))
+            Some(LockGuard(self))
         } else {
             None
         }
     }
 }
+
+unsafe impl<T> Send for Lock<T> {}
+unsafe impl<T> Sync for Lock<T> {}
 
 /// Iterator which remove all elems
 pub struct Drain<'a, T> {

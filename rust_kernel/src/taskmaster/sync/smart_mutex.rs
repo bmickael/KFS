@@ -1,4 +1,5 @@
 //! This file contains a smart mutex with dump backtrace of last locker feature
+use core::cell::UnsafeCell;
 use core::fmt::Debug;
 use core::ops::{Deref, DerefMut};
 use core::sync::atomic::{AtomicU32, Ordering};
@@ -91,7 +92,7 @@ impl RawSmartMutex {
     }
 }
 
-pub struct SmartMutexGuard<'a, T: Debug>(&'a mut SmartMutex<T>);
+pub struct SmartMutexGuard<'a, T: Debug>(&'a SmartMutex<T>);
 
 impl<'a, T: Debug> Drop for SmartMutexGuard<'a, T> {
     fn drop(&mut self) {
@@ -103,26 +104,26 @@ impl<'a, T: Debug> Deref for SmartMutexGuard<'a, T> {
     type Target = T;
 
     fn deref(&self) -> &Self::Target {
-        &self.0.data
+        unsafe { &*self.0.data.get() }
     }
 }
 
 impl<'a, T: Debug> DerefMut for SmartMutexGuard<'a, T> {
     fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0.data
+        unsafe { &mut *self.0.data.get() }
     }
 }
 
 /// A lock Wrapper for a generic Datatype
 pub struct SmartMutex<T: Debug> {
-    data: T,
+    data: UnsafeCell<T>,
     raw_lock: RawSmartMutex,
 }
 
 impl<'a, T: Debug> SmartMutex<T> {
     pub fn new(data: T) -> Self {
         SmartMutex {
-            data,
+            data: UnsafeCell::new(data),
             raw_lock: RawSmartMutex::INIT,
         }
     }
@@ -130,8 +131,7 @@ impl<'a, T: Debug> SmartMutex<T> {
         if !self.raw_lock.try_lock() {
             panic!("Dead lock {:?}", self.data);
         }
-        #[allow(cast_ref_to_mut)]
-        SmartMutexGuard(unsafe { &mut *(self as *const Self as *mut Self) })
+        SmartMutexGuard(self)
     }
     pub fn force_unlock(&'a self) {
         self.raw_lock.unlock();
