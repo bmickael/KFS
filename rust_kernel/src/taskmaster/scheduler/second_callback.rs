@@ -21,7 +21,10 @@ fn second_callback() {
 /// This function must be called in a unpremptible_context with the SECOND_CALLBACK_TRIGGER set as true
 pub unsafe extern "C" fn second_callback_handler() {
     loop {
-        while SECOND_CALLBACK_TRIGGER.compare_and_swap(true, false, Ordering::Relaxed) == false {
+        while SECOND_CALLBACK_TRIGGER
+            .compare_exchange(true, false, Ordering::Relaxed, Ordering::Relaxed)
+            .is_err()
+        {
             asm!("hlt");
         }
         // Check if we are really on a unpreemptible state

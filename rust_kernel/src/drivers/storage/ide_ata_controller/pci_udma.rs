@@ -140,7 +140,10 @@ impl Drive {
                 asm!("hlt");
             }
 
-            if TRIGGER.compare_and_swap(true, false, Ordering::Relaxed) == true {
+            if TRIGGER
+                .compare_exchange(true, false, Ordering::Relaxed, Ordering::Relaxed)
+                .is_ok()
+            {
                 let status = udma.get_status(); /* 8 */
 
                 if status.contains(DmaStatus::FAILED) {

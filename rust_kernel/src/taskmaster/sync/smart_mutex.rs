@@ -68,8 +68,11 @@ impl RawSmartMutex {
             current_ebp = *(current_ebp as *const u32) as _;
             assert_ne!(current_ebp, 0);
         };
-        let ebp = self.0.compare_and_swap(0, current_ebp, Ordering::Relaxed) as *const u32;
-        if ebp != 0 as *const u32 {
+        let ebp = self
+            .0
+            .compare_exchange(0, current_ebp, Ordering::Relaxed, Ordering::Relaxed)
+            .unwrap_or_else(|x| x) as *const u32;
+        if ebp != core::ptr::null() {
             // Here a DeadSmartMutex, we trace back the process which had put his EBP in the mutex
             eprintln!("--- Previous locker backtrace ----");
             unsafe {

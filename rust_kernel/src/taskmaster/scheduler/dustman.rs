@@ -22,7 +22,10 @@ pub unsafe extern "C" fn dustman_handler() {
     loop {
         trash_process();
         _preemptible();
-        while DUSTMAN_TRIGGER.compare_and_swap(true, false, Ordering::Relaxed) == false {
+        while DUSTMAN_TRIGGER
+            .compare_exchange(true, false, Ordering::Relaxed, Ordering::Relaxed)
+            .is_err()
+        {
             asm!("hlt");
         }
         // Check if we are really on a unpreemptible state
