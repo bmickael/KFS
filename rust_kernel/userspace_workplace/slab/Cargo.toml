@@ -2,8 +2,8 @@
 name = "slab"
 version = "0.1.0"
 authors = ["miniske"]
-edition = "2018"
+edition = "2021"
 
 [dependencies]
-libc = "*"
-rand = "0.6.5"
+libc = "0.2.146"
+rand = "0.8.5"

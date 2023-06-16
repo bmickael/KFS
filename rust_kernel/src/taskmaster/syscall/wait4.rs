@@ -391,6 +391,7 @@ pub fn sys_waitpid(pid: i32, wstatus: *mut i32, options: u32) -> SysResult<u32> 
 }
 
 bitflags! {
+    #[derive(Eq, PartialEq, Debug, Copy, Clone)]
     pub struct WaitOption: u32 {
         const WUNTRACED = libc_binding::WUNTRACED;
         const WCONTINUED = libc_binding::WCONTINUED;

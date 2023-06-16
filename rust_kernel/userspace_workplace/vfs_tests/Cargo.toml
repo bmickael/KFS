@@ -2,11 +2,11 @@
 name = "vfs_tests"
 version = "0.1.0"
 authors = ["miniske"]
-edition = "2018"
+edition = "2021"
 
 [dependencies]
-walkdir = "2"
+walkdir = "2.3.3"
 libc_binding = { path = "../../dependencies/libc_binding" }
 const_assert = { path = "../../dependencies/const_assert" }
-bitflags = "*"
-itertools = "*"
+bitflags = "0.2.3"
+itertools = "0.10.5"

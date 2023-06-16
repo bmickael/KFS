@@ -18,7 +18,7 @@ use messaging::{MessageTo, ProcessGroupMessage};
 pub struct LineDiscipline {
     pub tty: BufferedTty,
     termios: termios,
-    read_buffer: ArrayVec<[u8; 4096]>,
+    read_buffer: ArrayVec<u8, 4096>,
     foreground_process_group: Pid,
     end_of_file_set: bool,
     /// raw mode doesn't transform scancode in utf8

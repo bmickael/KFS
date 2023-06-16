@@ -5,7 +5,7 @@ use core::default::Default;
 use elf_loader::ProgramHeaderFlags;
 
 bitflags! {
-    #[derive(Default)]
+    #[derive(Default, Copy, Clone)]
     pub struct AllocFlags: u32 {
         const KERNEL_MEMORY = 1 << 0;
         const USER_MEMORY = 1 << 1;

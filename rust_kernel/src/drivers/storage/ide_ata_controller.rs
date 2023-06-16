@@ -708,6 +708,7 @@ pub enum AtaError {
 
 // Some errors may occured
 bitflags! {
+    #[derive(Debug, Copy, Clone)]
     struct ErrorRegister: u8 {
         const ADDRESS_MARK_NOT_FOUND = 1 << 0;
         const TRACK_ZERO_NOT_FOUND = 1 << 1;
@@ -722,6 +723,7 @@ bitflags! {
 
 // We need always check status register
 bitflags! {
+    #[derive(Debug, Copy, Clone)]
     struct StatusRegister: u8 {
         const ERR = 1 << 0; // Indicates an error occurred. Send a new command to clear it (or nuke it with a Software Reset).
         const IDX = 1 << 1; // Index. Always set to zero.

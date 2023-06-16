@@ -3,9 +3,11 @@ use bit_field::BitField;
 use bitflags::bitflags;
 
 bitflags! {
-    #[derive(Default)]
+    #[derive(Default, Copy, Clone)]
     #[repr(C)]
     pub struct Entry: u32 {
+        // Default for const Init
+        const DEFAULT = 0;
         /// If set, indicates that the page directory is currently in memory.
         /// If not set, then the CPU will ignore this directory in its search for an address translation.
         const PRESENT = 1 << 0;
@@ -56,7 +58,7 @@ bitflags! {
 
 impl Entry {
     pub const fn new() -> Self {
-        Self { bits: 0 }
+        Self::DEFAULT
     }
     /// Sets the address field of the entry.
     /// When the page_size bit is not set, the address is a 4-kb aligned address pointing to a Page Table.
@@ -69,7 +71,7 @@ impl Entry {
         } else {
             addr.0.get_bits(0..12) == 0
         });
-        self.bits.set_bits(12..32, addr.0.get_bits(12..32) as u32);
+        self.0 .0.set_bits(12..32, addr.0.get_bits(12..32) as u32);
         self
     }
 
@@ -78,13 +80,13 @@ impl Entry {
     /// When the page_size bit is set, the address instead directly points to a 4-MiB page, so no Page Table is then involved.
     #[inline(always)]
     pub fn set_entry_page(&mut self, page: Page<Phys>) -> &mut Self {
-        self.bits.set_bits(12..32, page.number as u32);
+        self.0 .0.set_bits(12..32, page.number as u32);
         self
     }
 
     #[inline(always)]
     pub fn entry_page(&self) -> Page<Phys> {
-        Page::new(self.bits.get_bits(12..32) as usize)
+        Page::new(self.bits().get_bits(12..32) as usize)
     }
 
     /// Gets the address field of the entry.
@@ -92,14 +94,14 @@ impl Entry {
     /// When the page_size bit is set, the address instead directly points to a 4-MiB page, so no Page Table is then involved.
     #[inline(always)]
     pub fn entry_addr(&self) -> Phys {
-        Phys((self.bits.get_bits(12..32) as usize) << 12)
+        Phys((self.bits().get_bits(12..32) as usize) << 12)
     }
 
     /// This sets the 3 available bits() of the entry.
     /// Currently this is more a placeholder then a definitive implementation. It should be decided what is done with those bits().
     #[allow(dead_code)]
     pub fn set_available_field(&mut self, bits: u8) -> &mut Self {
-        self.bits.set_bits(9..12, bits as u32);
+        self.0 .0.set_bits(9..12, bits as u32);
         self
     }
 

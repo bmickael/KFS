@@ -2,12 +2,12 @@
 name = "interrupts"
 version = "0.1.0"
 authors = ["mordak <bmickael@student.42.fr>"]
-edition = "2018"
+edition = "2021"
 license = "GPL3"
 description = "A smart toolkit about IDT"
 documentation = "cargo doc --open"
 homepage = "index.html"
 
 [dependencies]
-bit_field = "0.10.0"
+bit_field = "0.10.2"
 i386 = { path = "../i386" }

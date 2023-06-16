@@ -220,7 +220,7 @@ impl Inode {
 
 // Inode flags
 bitflags! {
-    #[derive(Default)]
+    #[derive(Default, Debug, Copy, Clone)]
     pub struct InodeFlags: u32 {
         const SECURE_DELETION = 0x00000001;
         const KEEP_A_COPY_OF_DATA_WHEN_DELETED = 0x00000002;

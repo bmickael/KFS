@@ -76,6 +76,7 @@ impl Prdt {
 
 // There are just 2 DMA commands
 bitflags! {
+    #[derive(Debug, Copy, Clone)]
     pub struct DmaCommand: u8 {
         const ONOFF = 1 << 0; // Bit 0 (value = 1) is the Start/Stop bit. Setting the bit puts the controller in DMA mode for that ATA channel.
         const RDWR = 1 << 3; // Bit 3 (value = 8) The disk controller does not automatically detect whether the next disk operation is a read or write.
@@ -84,6 +85,7 @@ bitflags! {
 
 // Some status indications
 bitflags! {
+    #[derive(Debug, Copy, Clone)]
     pub struct DmaStatus: u8 {
         const STATUS = 1 << 0; // Bit 0 (value = 1) is set when the bus goes into DMA mode. It is cleared when the last PRD in the table has been used up.
         const FAILED = 1 << 1; // Bit 1 (value = 2) is set if any DMA memory transfer failed for any reason in this PRDT.
@@ -222,9 +224,11 @@ impl Udma {
 
     /// Get the UDMA status
     pub fn get_status(&self) -> DmaStatus {
-        DmaStatus {
-            bits: Pio::<u8>::new(self.bus_mastered_register + Self::DMA_STATUS).read(),
-        }
+        DmaStatus(
+            Pio::<u8>::new(self.bus_mastered_register + Self::DMA_STATUS)
+                .read()
+                .into(),
+        )
     }
 }
 

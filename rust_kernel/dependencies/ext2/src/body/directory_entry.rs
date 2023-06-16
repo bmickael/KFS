@@ -23,7 +23,7 @@ use libc_binding::{c_char, Errno, FileType, NAME_MAX};
 // equivalently marked by a separate directory entry with an inode number of zero, indicating that directory entry should be skipped.
 
 /// Directory Entry base structure
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq)]
 #[repr(packed)]
 pub struct DirectoryEntryHeader {
     /// Inode
@@ -40,7 +40,7 @@ pub struct DirectoryEntryHeader {
     pub type_indicator: DirectoryEntryType,
 }
 
-#[derive(Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(packed)]
 pub struct DirectoryEntry {
     pub header: DirectoryEntryHeader,
@@ -59,7 +59,7 @@ impl fmt::Debug for DirectoryEntry {
 }
 
 /// Type of file
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq)]
 #[allow(dead_code)]
 #[repr(u8)]
 pub enum DirectoryEntryType {
@@ -146,7 +146,7 @@ impl DirectoryEntry {
 }
 
 /// Newtype of filename
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Eq)]
 #[repr(transparent)]
 pub struct Filename(pub [c_char; NAME_MAX as usize + 1]);
 

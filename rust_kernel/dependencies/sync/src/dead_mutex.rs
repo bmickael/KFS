@@ -26,7 +26,7 @@ unsafe impl RawMutex for RawDeadMutex {
         return true;
     }
 
-    fn unlock(&self) {
+    unsafe fn unlock(&self) {
         self.0.store(false, Ordering::SeqCst);
     }
 }

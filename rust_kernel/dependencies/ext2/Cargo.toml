@@ -2,17 +2,17 @@
 name = "ext2"
 version = "0.1.0"
 authors = ["vcombey <vcombey@student.42.fr>"]
-edition = "2018"
+edition = "2021"
 
 [dependencies]
-bitflags = "1.0.4"
-bit_field = "0.9.0"
+bitflags = "2.3.2"
+bit_field = "0.10.2"
 terminal = { path = "../terminal" }
 fallible_collections = "0.4.8"
 libc_binding = { path = "../libc_binding" }
 
 [dev-dependencies]
-rand = "0.6.5"
+rand = "0.8.5"
 
 [features]
 test = []

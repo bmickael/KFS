@@ -2,7 +2,7 @@
 name = "kernel_modules"
 version = "0.1.0"
 authors = ["mordak <bmickael@student.42.fr>"]
-edition = "2018"
+edition = "2021"
 license = "GPL3"
 description = "A tiny kernel module toolkit for OS developement"
 documentation = "cargo doc --open"
@@ -15,4 +15,4 @@ time = { path = "../time" }
 libc_binding = { path = "../libc_binding" }
 
 [dependencies.log]
-version = "0.4.17"
+version = "0.4.19"

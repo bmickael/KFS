@@ -329,6 +329,7 @@ pub enum SegmentType {
 }
 
 bitflags! {
+    #[derive(Debug, Copy, Clone)]
     pub struct ProgramHeaderFlags: u32 {
         const Executable = 0x1;
         const Writable = 0x2;
@@ -536,6 +537,7 @@ impl TryFrom<u32> for SectionHeaderType {
 }
 
 bitflags! {
+    #[derive(Debug)]
     pub struct SectionHeaderFlags: u32 {
         #[allow(non_upper_case_globals)]
         const Write = 0x1;

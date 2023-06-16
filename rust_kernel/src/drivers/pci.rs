@@ -252,6 +252,7 @@ pub struct PciType0 {
 
 // List of PCI commands
 bitflags! {
+    #[derive(Debug, Copy, Clone)]
     pub struct PciCommand: u16 {
         const INTERRUPT_DISABLE = 1 << 10; // If set to 1 the assertion of the devices INTx# signal is disabled; otherwise, assertion of the signal is enabled.
         const FAST_BACK_TO_BACK_ENABLE = 1 << 9; // If set to 1 indicates a device is allowed to generate fast back-to-back transactions; otherwise, fast back-to-back transactions are only allowed to the same agent.
@@ -269,6 +270,7 @@ bitflags! {
 
 // List of PCI status
 bitflags! {
+    #[derive(Debug, Copy, Clone)]
     pub struct PciStatus: u16 {
         const INTERRUPT_STATUS = 1 << 3; // Represents the state of the device's INTx# signal. If set to 1 and bit 10 of the Command register (Interrupt Disable bit) is set to 0 the signal will be asserted; otherwise, the signal will be ignored.
         const CAPABILITIES_LIST = 1 << 4; // If set to 1 the device implements the pointer for a New Capabilities Linked list at offset 0x34; otherwise, the linked list is not available
@@ -292,12 +294,12 @@ impl PciType0 {
         let l1 = Pio::<u32>::new(Pci::CONFIG_DATA).read();
 
         let c = match state {
-            true => PciCommand { bits: l1 as u16 } | command,
-            false => PciCommand { bits: l1 as u16 } & !command,
+            true => PciCommand((l1 as u16).into()) | command,
+            false => PciCommand((l1 as u16).into()) & !command,
         };
 
         Pio::<u32>::new(Pci::CONFIG_ADDRESS).write(pci_location + 4);
-        Pio::<u16>::new(Pci::CONFIG_DATA).write(c.bits);
+        Pio::<u16>::new(Pci::CONFIG_DATA).write(c.bits());
     }
 
     /// Get the status of the PCI bus
@@ -305,9 +307,7 @@ impl PciType0 {
         Pio::<u32>::new(Pci::CONFIG_ADDRESS).write(pci_location + 4);
         let l1 = Pio::<u32>::new(Pci::CONFIG_DATA).read();
 
-        PciStatus {
-            bits: (l1 >> 16) as u16,
-        }
+        PciStatus(((l1 >> 16) as u16).into())
     }
 }
 

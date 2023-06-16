@@ -209,6 +209,7 @@ enum CreatorOperatingSystem {
 // These features if present on a file system are required to be supported by an implementation
 // in order to correctly read from or write to the file system.
 bitflags! {
+    #[derive(Copy, Clone, Debug)]
     struct RequiredFeaturesFlag: u32 {
         const COMPRESSION_IS_USED = 0x1;
         const DIRECTORY_ENTRIES_CONTAIN_A_TYPE_FIELD = 0x2;
@@ -220,6 +221,7 @@ bitflags! {
 // These are optional features for an implementation to support, but offer performance or
 // reliability gains to implementations that do support them.
 bitflags! {
+    #[derive(Copy, Clone, Debug)]
     struct OptionalFeaturesFlag: u32 {
         const PREALLOCATE_SOME_NUMBER_OF_BLOCKS_A_DIRECTORY_WHEN_CREATING_A_NEW_ONE = 0x0001;
         const AFS_SERVER_INODES_EXIST = 0x0002;
@@ -233,6 +235,7 @@ bitflags! {
 // These features, if present on a file system, are required in order for an implementation
 // to write to the file system, but are not required to read from the file system.
 bitflags! {
+    #[derive(Copy, Clone, Debug)]
     struct ReadOnlyFeaturesFlag: u32 {
         const SPARSE_SUPERBLOCKS_AND_GROUP_DESCRIPTOR_TABLES = 0x1;
         const FILE_SYSTEM_USES_A_64_BIT_FILE_SIZE = 0x2;

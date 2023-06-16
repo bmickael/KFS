@@ -52,6 +52,7 @@ pub unsafe fn init(boot_device: u8) -> DiskResult<()> {
 
 // Check extension result
 bitflags! {
+    #[derive(Debug, Copy, Clone)]
     struct InterfaceSupport: u16 {
         const DAP = 1 << 0;              // Device Access using the packet structure
         const LOCK_AND_EJECT = 1 << 1;   // Drive Locking and Ejecting
@@ -156,9 +157,7 @@ impl BiosInt13h {
         let version = reg.eax as u16;
 
         // Check if interface support DAP (Device Access using the packet structure)
-        let interface_support = InterfaceSupport {
-            bits: reg.ecx.get_bits(0..16) as u16,
-        };
+        let interface_support = InterfaceSupport((reg.ecx.get_bits(0..16) as u16).into());
         if !interface_support.contains(InterfaceSupport::DAP) {
             return Err(DiskError::NotSupported);
         }

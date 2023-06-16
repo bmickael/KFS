@@ -144,7 +144,7 @@ pub struct StructSigaction {
 }
 
 bitflags! {
-    #[derive(Default)]
+    #[derive(Default, Debug, Copy, Clone)]
     pub struct SaFlags: u32 {
         const SA_NOCLDSTOP = SA_NOCLDSTOP;
         const SA_NOCLDWAIT = SA_NOCLDWAIT;
@@ -203,7 +203,7 @@ pub struct SignalInterface {
 
 bitflags! {
     /// The check_pending_signals function returns what to do
-    #[derive(Default)]
+    #[derive(Default, Eq, PartialEq)]
     pub struct JobAction: u32 {
         /// A signal must be handled
         const INTERRUPT = 1 << 0;

@@ -2,11 +2,11 @@
 name = "shell"
 version = "0.1.0"
 authors = ["mordak <bmickael@student.42.fr>"]
-edition = "2018"
+edition = "2021"
 
 [lib]
 crate-type = ["staticlib"]
 
 [dependencies]
-bit_field = "0.9.0"
+bit_field = "0.10.2"
 ansi_escape_code = { path = "../dependencies/ansi_escape_code" }

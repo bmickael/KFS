@@ -2,7 +2,7 @@
 name = "time"
 version = "0.1.0"
 authors = ["mordak <bmickael@student.42.fr>"]
-edition = "2018"
+edition = "2021"
 license = "GPL3"
 description = "a brief history of time"
 documentation = "cargo doc --open"

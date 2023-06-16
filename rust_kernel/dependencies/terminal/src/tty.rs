@@ -427,7 +427,7 @@ pub struct BufferedTty {
     /// TTY contained
     pub tty: Tty,
     /// contains unfinished escaped sequence, capacity max = 256
-    escaped_buf: ArrayString<[u8; Self::ESCAPED_BUF_CAPACITY]>,
+    escaped_buf: ArrayString<{ Self::ESCAPED_BUF_CAPACITY }>,
     /// global ipc uid associated to the tty
     pub uid_file_op: Option<usize>,
 }

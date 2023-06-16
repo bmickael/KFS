@@ -2,14 +2,14 @@
 name = "screen"
 version = "0.1.0"
 authors = ["mordak <bmickael@student.42.fr>"]
-edition = "2018"
 license = "GPL3"
+edition = "2021"
 description = "Just the screen monad"
 documentation = "cargo doc --open"
 homepage = "index.html"
 
 [dependencies]
-bitflags = "1.0.4"
+bitflags = "2.3.2"
 raw_data = { path = "../raw_data" }
 i386 = { path = "../i386" }
 ansi_escape_code = { path = "../ansi_escape_code" }

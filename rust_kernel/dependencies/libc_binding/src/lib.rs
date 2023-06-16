@@ -52,10 +52,10 @@ impl From<AllocError> for Errno {
 }
 
 extern crate hashbrown;
-use hashbrown::CollectionAllocErr;
+use hashbrown::TryReserveError as OtherTryReserveError;
 
-impl From<CollectionAllocErr> for Errno {
-    fn from(_e: CollectionAllocErr) -> Self {
+impl From<OtherTryReserveError> for Errno {
+    fn from(_e: OtherTryReserveError) -> Self {
         Errno::ENOMEM
     }
 }
@@ -455,7 +455,7 @@ const_assert!(PATH_MAX as usize >= _POSIX_PATH_MAX);
 use bitflags::bitflags;
 
 bitflags! {
-    #[derive(Default)] // I wonder for this derive <.<
+    #[derive(Default, Debug, Copy, Clone)] // I wonder for this derive <.<
     pub struct OpenFlags: u32 {
         /// Open for execute only (non-directory files). The result is
         /// unspecified if this flag is applied to a directory.
@@ -644,7 +644,7 @@ impl TryFrom<u32> for Whence {
 }
 
 bitflags! {
-    #[derive(Default)]
+    #[derive(Default, Debug, PartialEq, Copy, Clone, Eq)]
     pub struct FileType: u16 {
         const S_IFMT = S_IFMT as u16;
         const UNIX_SOCKET = S_IFSOCK as u16;
@@ -763,6 +763,7 @@ impl TryFrom<mode_t> for FileType {
 }
 
 bitflags! {
+    #[derive(Copy, Clone, Debug, Eq, PartialEq)]
     pub struct Amode: u32 {
         const F_OK = F_OK;
         const R_OK = R_OK;

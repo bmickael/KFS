@@ -2,7 +2,7 @@
 name = "libc_binding"
 version = "0.1.0"
 authors = ["vcombey <vcombey@student.42.fr>"]
-edition = "2018"
+edition = "2021"
 build = "build.rs"
 
 [build-dependencies]
@@ -11,5 +11,5 @@ bindgen = { version = "0.54.0", default-features = false , features = ["clap", "
 
 [dependencies]
 const_assert = { path = "../const_assert" }
-bitflags = "1.0.4"
-hashbrown = "0.7.1"
+bitflags = "2.3.2"
+hashbrown = "0.14.0"

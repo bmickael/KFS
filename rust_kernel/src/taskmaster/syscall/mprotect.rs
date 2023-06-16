@@ -8,6 +8,7 @@ use crate::memory::tools::{Address, AllocFlags, NbrPages, Virt, PAGE_SIZE};
 use libc_binding::{PROT_EXEC, PROT_NONE, PROT_READ, PROT_WRITE};
 
 bitflags! {
+    #[derive(Copy, Clone, Debug, Eq, PartialEq)]
     pub struct MmapProt: u32 {
         ///Pages may not be accessed.
         const NONE = PROT_NONE;

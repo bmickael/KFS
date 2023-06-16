@@ -2,7 +2,7 @@
 name = "turbo_fish"
 version = "0.0.2"
 authors = ["Vincent Combey <vcombey@student.42.fr>", "Mickael Billod <bmickael@student.42.fr>", "Sebastien Clolus <sclolus@student.42.fr>"]
-edition = "2018"
+edition = "2021"
 
 [profile.release]
 opt-level = 3
@@ -17,9 +17,9 @@ debug = true
 crate-type = ["staticlib"]
 
 [dependencies]
-bit_field = "0.10.0"
-bitflags = "1.0.4"
-lock_api = "0.1.5"
+bit_field = "0.10.2"
+bitflags = "2.3.2"
+lock_api = "0.4.10"
 derive_is_enum_variant = "0.1.1"
 try_clone_derive = "0.1.1"
 io = { path = "dependencies/io" }
@@ -42,22 +42,22 @@ rtc_toolkit = { path = "dependencies/rtc_toolkit" }
 screen = { path = "dependencies/screen" }
 
 [dependencies.log]
-version = "0.4.17"
+version = "0.4.19"
 
 [dependencies.fallible_collections]
 version = "0.4.8"
 features = ["unstable"]
 
 [dependencies.itertools]
-version = "0.8.0"
+version = "0.10.5"
 default-features = false
 
 [dependencies.lazy_static]
-version = "1.3.0"
+version = "1.4.0"
 features = ["spin_no_std"]
 
 [dependencies.arrayvec]
-version = "0.5.1"
+version = "0.7.3"
 default-features = false
 # std = []
 # array-sizes-33-128 = [true]

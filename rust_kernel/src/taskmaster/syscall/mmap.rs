@@ -69,6 +69,7 @@ pub unsafe fn sys_mmap2(
 }
 
 bitflags! {
+    #[derive(Debug, Copy, Clone)]
     pub struct MmapFlags: u32 {
         /// Share this mapping.  Updates to the mapping are visible to other
         /// processes mapping the same region, and (in  the  case  of  file-
@@ -104,7 +105,7 @@ bitflags! {
         const MAP_FIXED = 0x10;
 
         /// Synonym for MAP_ANONYMOUS.  Deprecated.
-        const MAP_ANON = Self::MAP_ANONYMOUS.bits;
+        const MAP_ANON = Self::MAP_ANONYMOUS.bits();
 
         /// The mapping is not backed by any file; its contents are initial‐
         /// ized  to zero.  The fd argument is ignored; however, some imple‐
