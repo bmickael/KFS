@@ -85,6 +85,7 @@ no-exit-qemu = []
 with-login = []
 
 [workspace]
+resolver = "2"
 members = [
 "dependencies/io",
 "dependencies/mbr",

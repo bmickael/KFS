@@ -15,9 +15,9 @@ fn main() {
         .impl_debug(true)
         .ctypes_prefix("super")
         .ignore_functions()
-        .blacklist_type("u8")
-        .blacklist_type("u16")
-        .blacklist_type("u32")
+        .blocklist_type("u8")
+        .blocklist_type("u16")
+        .blocklist_type("u32")
         .clang_arg("--target=x86_64-pc-linux-gnu")
         .clang_arg("--sysroot=/toolchain_turbofish/sysroot")
         // Tell cargo to invalidate the built crate whenever any of the
