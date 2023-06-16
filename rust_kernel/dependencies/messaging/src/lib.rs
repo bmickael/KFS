@@ -98,8 +98,7 @@ impl<T> MessageQueue<T> {
 
 mod scheduler {
     use super::MessageTo;
-    extern "C" {
-        #[allow(improper_ctypes)]
+    extern "Rust" {
         pub fn send_message(message: MessageTo);
     }
 }
