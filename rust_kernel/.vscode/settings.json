@@ -1,3 +1,4 @@
 {
-    "rust-analyzer.cargo.args": ["-Z", "build-std=core,compiler_builtins,alloc", "-Z", "build-std-features=compiler-builtins-mem", "--target", "ivybridge-cpu.json"]
+    "rust-analyzer.cargo.target": "i686-unknown-linux-gnu",
+    "rust-analyzer.cargo.args": ["-Z", "build-std=core,compiler_builtins,alloc", "-Z", "build-std-features=compiler-builtins-mem"],
 }
