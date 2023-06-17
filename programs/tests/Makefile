@@ -115,7 +115,7 @@ $(BUILD_DIR)/%: $(OBJ_DIR)/%.o Makefile $(LIBC_AR) obj/tools.o
 	@mkdir -pv ./$(dir $@)
 	$(CC) -Wl,--gc-sections $(CFLAGS) -o $@ $< obj/tools.o $(LIB)
 ifneq ($(GNU),yes)
-	sudo cp -rv --parents $@ $(SYSTEM_ROOT)
+	cp -rv --parents $@ $(SYSTEM_ROOT)
 endif
 
 $(OBJ_DIR)/%.o: %.c Makefile include/tools.h

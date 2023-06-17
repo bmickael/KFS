@@ -72,14 +72,14 @@ ifeq ($(GNU),yes)
 	$(CC) -g $(OBJS) -L minilibx_linux -lmlx -lm -lbsd -lXext -lX11 -L libft -lft $(CFLAGS) -o $(NAME)
 else
 	$(CC) -g $(OBJS)  -L libft -lft -o2 -flto -o $(NAME) ../wolf3D/minilibx_turbofish/minilibx_turbofish.a
-	sudo mkdir -p $(SYSTEM_ROOT)/wolfportal
-	sudo mkdir -p $(SYSTEM_ROOT)/wolfportal/img
-	sudo mkdir -p $(SYSTEM_ROOT)/wolfportal/maps
-	sudo cp -v $(NAME) $(SYSTEM_ROOT)/wolfportal
-	sudo cp -v maps/* $(SYSTEM_ROOT)/wolfportal/maps
-	sudo cp -v img/*.bmp $(SYSTEM_ROOT)/wolfportal/img
-	sudo chmod +x wolf.sh
-	sudo cp -rv wolf.sh $(SYSTEM_ROOT)
+	mkdir -p $(SYSTEM_ROOT)/wolfportal
+	mkdir -p $(SYSTEM_ROOT)/wolfportal/img
+	mkdir -p $(SYSTEM_ROOT)/wolfportal/maps
+	cp -v $(NAME) $(SYSTEM_ROOT)/wolfportal
+	cp -v maps/* $(SYSTEM_ROOT)/wolfportal/maps
+	cp -v img/*.bmp $(SYSTEM_ROOT)/wolfportal/img
+	chmod +x wolf.sh
+	cp -rv wolf.sh $(SYSTEM_ROOT)
 endif
 
 clean:

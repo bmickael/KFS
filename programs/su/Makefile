@@ -71,13 +71,13 @@ all: $(TARGET) Makefile
 
 $(TARGET): $(OBJ_C) $(LIBC_AR) | Makefile
 	$(CC) -Wl,--gc-sections -o $@ $(CFLAGS) $^
-	sudo cp -v --parents $@ $(SYSTEM_ROOT)
-	sudo cp -v --parents etc/* $(SYSTEM_ROOT)
-	sudo ln -sf /proc/mounts $(SYSTEM_ROOT)/etc/mtab
+	cp -v --parents $@ $(SYSTEM_ROOT)
+	cp -v --parents etc/* $(SYSTEM_ROOT)
+	ln -sf /proc/mounts $(SYSTEM_ROOT)/etc/mtab
 
 	@# Removing thoses lines _WILL_ make su not work properly for non-root users.
-	sudo chown root:root $(SYSTEM_ROOT)/$(TARGET)
-	sudo chmod u+s $(SYSTEM_ROOT)/$(TARGET)
+#	chown root:root $(SYSTEM_ROOT)/$(TARGET)
+	chmod u+s $(SYSTEM_ROOT)/$(TARGET)
 
 $(OBJ_DIR)/%.o: %.c Makefile $(HEADERS)
 	@mkdir -pv $(OBJ_DIR)

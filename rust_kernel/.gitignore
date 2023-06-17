@@ -1,5 +1,8 @@
 *.map
 nm_map_gen
 target
-*.orig
 !.vscode
+.rust-toolchain
+*.o
+kernel.elf
+generate

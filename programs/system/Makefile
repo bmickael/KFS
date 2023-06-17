@@ -44,7 +44,7 @@ $(BUILD_DIR)/%: $(OBJ_DIR)/%.o Makefile $(LIBC_AR)
 	@mkdir -pv ./$(dir $@)
 	$(CC) -Wl,--gc-sections $(CFLAGS) -o $@ $< $(LIB)
 ifneq ($(GNU),yes)
-	sudo cp -rv --parents $@ $(SYSTEM_ROOT)
+	cp -rv --parents $@ $(SYSTEM_ROOT)
 endif
 
 $(OBJ_DIR)/%.o: %.c Makefile

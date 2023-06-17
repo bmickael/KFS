@@ -84,10 +84,10 @@ $(NAME): $(OBJ) mlx
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LDFLAGS)
 ifneq ($(GNU),yes)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LDFLAGS)
-	sudo cp -v $(NAME) $(SYSTEM_ROOT)/bin/wolf3D
-	sudo cp -rv maps $(SYSTEM_ROOT)/bin/wolf3D
-	sudo cp -rv images $(SYSTEM_ROOT)/bin/wolf3D
-	sudo cp -rv wolf $(SYSTEM_ROOT)
+	cp -v $(NAME) $(SYSTEM_ROOT)/bin/wolf3D
+	cp -rv maps $(SYSTEM_ROOT)/bin/wolf3D
+	cp -rv images $(SYSTEM_ROOT)/bin/wolf3D
+	cp -rv wolf $(SYSTEM_ROOT)
 endif
 
 mlx:
